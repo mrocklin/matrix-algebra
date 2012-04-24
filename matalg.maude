@@ -107,7 +107,7 @@ fmod MA-ASSUMPTIONS is
     op _in_ : AppliedPredicate Context -> Bool [prec 50] .
     eq AP <= C = C => AP .
 
-    ceq AP <= C = true if AP in C .
+    ceq C => AP = true if AP in C .
 
     *** SYMMETRIC
     ceq C => (X Y is symmetric) = true if C => X is symmetric
@@ -223,6 +223,5 @@ fmod MA-SIMPLIFY-TEST is
     eq ctxt = X is symmetric , X is orthogonal , Y is symmetric .
     eq ctxt2 = X Y is symmetric , X is orthogonal .
     eq ctxt3 = X is positive-definite , X is symmetric , Y is orthogonal .
-
 
 endfm 
