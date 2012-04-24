@@ -7,6 +7,7 @@ fmod MA is
     subsort MatrixSymbol < MatrixExpr . 
 
     vars A B C X Y : MatrixExpr .
+    var S : MatrixSymbol .
     vars a b n m : Int .
     var M : Qid .
 
@@ -24,8 +25,8 @@ fmod MA is
     eq A I = A .
 
     eq transpose(transpose(A)) = A .
-    eq transpose(A B) = transpose(B) transpose(A) .
-    eq transpose(A + B) = transpose(A) + transpose(B) .
+    *** eq transpose(A B) = transpose(B) transpose(A) .
+    *** eq transpose(A + B) = transpose(A) + transpose(B) .
 
     eq inverse(inverse(A)) = A .
     eq inverse(A + B) = inverse(A) + inverse(B) .
@@ -59,7 +60,7 @@ fmod MA is
     eq shape(inverse(A)) = shape(A) .
 
     op valid : MatrixExpr -> Bool .
-    eq valid(matrix(M, n by m)) = true . *** all symbols are valid
+    eq valid(S) = true . *** all symbols are valid
     eq valid(X Y) = valid(X) and valid(Y) and (cols(X) == rows(Y)) .
     eq valid(X + Y) = valid(X) and valid(Y) and (shape(X) == shape(Y)) .
     eq valid(transpose(X)) = valid(X) .
@@ -69,11 +70,10 @@ endfm
 
 fmod MAT-TEST is  
     protecting MA .  
-    ops A B : -> Qid .
     ops X Y : -> MatrixSymbol .
     ops n m k l p : -> Int .
-    eq X = matrix(A, n by m) .
-    eq Y = matrix(B, m by n) .
+    eq X = matrix('X, n by m) .
+    eq Y = matrix('Y, m by n) .
     op mat1 : -> MatrixExpr .
 
     eq mat1 = transpose(Y transpose(X Y)) .
@@ -123,11 +123,10 @@ endfm
 
 fmod MA-ASSUMPTIONS-TEST is  
     protecting MA-ASSUMPTIONS .  
-    ops A B : -> Qid .
     ops X Y : -> MatrixSymbol .
     ops n m k l p : -> Int .
-    eq X = matrix(A, n by m) .
-    eq Y = matrix(B, m by n) .
+    eq X = matrix('X, n by m) .
+    eq Y = matrix('Y, m by n) .
 
     ops ctxt ctxt2 ctxt3 : -> Context .
     ops query query2 query3 : -> Context .
@@ -167,9 +166,9 @@ fmod MA-SIMPLIFY is
 
     eq simplify(S with C) = S with C .
     ceq simplify(X transpose(X) with C) = I with C
-        if X is orthogonal in C .
+        if C => X is orthogonal .
     ceq simplify(transpose(X) with C) = simplify(X with C) 
-        if X is symmetric in C .
+        if C => X is symmetric .
     eq simplify(transpose(X) with C) = transpose(simplify(X with C)) [owise] .
 
     eq simplify(X Y with C) = simplify(X with C) simplify(Y with C) [owise] .
@@ -180,11 +179,10 @@ endfm
 
 fmod MA-SIMPLIFY-TEST is  
     protecting MA-SIMPLIFY .  
-    ops A B : -> Qid .
     ops X Y Z : -> MatrixSymbol .
     ops n m k l p : -> Int .
-    eq X = matrix(A, n by m) .
-    eq Y = matrix(B, m by n) .
+    eq X = matrix('X, n by m) .
+    eq Y = matrix('Y, m by n) .
 
     ops ctxt ctxt2 : -> Context .
     ops query query2 : -> Context .
