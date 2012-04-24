@@ -93,6 +93,7 @@ fmod MA-ASSUMPTIONS is
             [ctor assoc comm id: empty prec 49 format (d r os d)] .
 
     ops symmetric orthogonal invertible : -> Predicate .
+    ops positive-definite singular : -> Predicate .
 
     op _is_ : MatrixExpr Predicate -> AppliedPredicate [prec 45].
 
@@ -121,6 +122,20 @@ fmod MA-ASSUMPTIONS is
     ceq C => X is invertible = true if C => X is orthogonal .
     ceq C => transpose(X) is orthogonal = true if C => X is orthogonal .
     ceq C => inverse(X)   is orthogonal = true if C => X is orthogonal .
+
+    *** POSITIVE DEFINITE 
+    ceq C => X Y is positive-definite = true 
+                    if C => X is positive-definite 
+                   and C => Y is positive-definite .     
+    ceq C => X + Y is positive-definite = true
+                    if C => X is positive-definite 
+                   and C => Y is positive-definite .     
+    ceq C => X is positive-definite = true if C => X is orthogonal .
+    ceq C => X is invertible = true if C => X is positive-definite .
+
+    *** SINGULAR
+    ceq C => X is positive-definite = false if C => X is singular == true .
+    ceq C => X is invertible = false if C => X is singular .
 
     *** Catch all - ask for direct membership in the context 
     eq C => AP = AP in C .
@@ -201,11 +216,13 @@ fmod MA-SIMPLIFY-TEST is
     eq X = matrix('X, n by m) .
     eq Y = matrix('Y, m by n) .
 
-    ops ctxt ctxt2 : -> Context .
+    ops ctxt ctxt2 ctxt3 : -> Context .
     ops query query2 : -> Context .
     eq query = X is symmetric . 
     eq query2 = Y is symmetric .
     eq ctxt = X is symmetric , X is orthogonal , Y is symmetric .
     eq ctxt2 = X Y is symmetric , X is orthogonal .
+    eq ctxt3 = X is positive-definite , X is symmetric , Y is orthogonal .
+
 
 endfm 
