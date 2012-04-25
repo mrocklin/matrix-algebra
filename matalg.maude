@@ -115,6 +115,8 @@ fmod MA-ASSUMPTIONS is
     ceq C => X + Y is symmetric = true if C => X is symmetric 
                                       and C => Y is symmetric .
     ceq C => transpose(X) is symmetric = true if C => X is symmetric .
+    eq C => transpose(X) X is symmetric = true .
+    eq C => X transpose(X) is symmetric = true .
 
     *** ORTHOGONAL
     ceq C => X Y is orthogonal = true if C => X is orthogonal
