@@ -79,7 +79,7 @@ fmod MAT-TEST is
     eq mat1 = transpose(Y transpose(X Y)) .
 endfm 
 
-*** ======================================================================= ***
+*** ==========================================================================
 
 fmod MA-ASSUMPTIONS is 
     protecting MA .
@@ -94,6 +94,7 @@ fmod MA-ASSUMPTIONS is
 
     ops symmetric orthogonal invertible : -> Predicate .
     ops positive-definite singular : -> Predicate .
+    ops lower-triangular upper-triangular diagonal tridiagonal : -> Predicate .
 
     op _is_ : MatrixExpr Predicate -> AppliedPredicate [prec 45].
 
@@ -110,13 +111,15 @@ fmod MA-ASSUMPTIONS is
     ceq C => AP = true if AP in C .
 
     *** SYMMETRIC
-    ceq C => (X Y is symmetric) = true if C => X is symmetric
+    ceq C => X Y is symmetric   = true if C => X is symmetric
                                       and C => Y is symmetric .
     ceq C => X + Y is symmetric = true if C => X is symmetric 
                                       and C => Y is symmetric .
     ceq C => transpose(X) is symmetric = true if C => X is symmetric .
     eq C => transpose(X) X is symmetric = true .
     eq C => X transpose(X) is symmetric = true .
+    ceq C => X Y transpose(X) is symmetric = true if C => Y is symmetric .
+    ceq C => transpose(X) Y X is symmetric = true if C => Y is symmetric .
 
     *** ORTHOGONAL
     ceq C => X Y is orthogonal = true if C => X is orthogonal
@@ -138,6 +141,21 @@ fmod MA-ASSUMPTIONS is
     *** SINGULAR
     ceq C => X is positive-definite = false if C => X is singular == true .
     ceq C => X is invertible = false if C => X is singular .
+
+    *** TRIANGULAR, DIAGONAL
+    ceq C => X Y is lower-triangular   = true if C => X is lower-triangular 
+                                            and  C => Y is lower-triangular .
+    ceq C => X Y is upper-triangular   = true if C => X is upper-triangular 
+                                            and  C => Y is upper-triangular .
+    ceq C => X + Y is lower-triangular = true if C => X is lower-triangular 
+                                            and  C => Y is lower-triangular .
+    ceq C => X + Y is upper-triangular = true if C => X is upper-triangular 
+                                            and  C => Y is upper-triangular .
+    ceq C => X + Y is diagonal = true if C => X is diagonal 
+                                     and C => Y is diagonal .
+    ceq C => X Y is diagonal   = true if C => X is diagonal 
+                                     and C => Y is diagonal .
+
 
     *** Catch all - ask for direct membership in the context 
     eq C => AP = AP in C .
@@ -202,6 +220,7 @@ fmod MA-SIMPLIFY is
                                 if C => X is orthogonal .
 
     *** Catch Alls, reduce simplify to sub-terms
+    *** TODO these are currently ambiguous
     eq simplify(X Y with C) = simplify(X with C) simplify(Y with C) [owise] .
     eq simplify(X + Y with C) = simplify(X with C) + simplify(Y with C) [owise].
     eq simplify(transpose(X) with C) = transpose(simplify(X with C)) [owise] .
