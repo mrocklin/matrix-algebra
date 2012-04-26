@@ -3,18 +3,8 @@ load ../assumptions.maude
 fmod TEST is  
     protecting MATRIX-ASSUMPTIONS .  
     ops X Y : -> MatrixSymbol .
-    ops n m k l p : -> Int .
     eq X = matrix('X, n by m) .
     eq Y = matrix('Y, m by n) .
-
-    ops ctxt ctxt2 ctxt3 : -> Context .
-    ops query query2 query3 : -> Context .
-    eq query = X is symmetric . 
-    eq query2 = Y is symmetric .
-    eq query3 = X Y is symmetric .
-    eq ctxt = X is symmetric , X is orthogonal , Y is symmetric .
-    eq ctxt2 = X Y is symmetric , X is orthogonal .
-    eq ctxt3 = X Z is symmetric , Y is symmetric .
 endfm 
 
 red in TEST : X is symmetric , Y is symmetric => X Y is symmetric .
