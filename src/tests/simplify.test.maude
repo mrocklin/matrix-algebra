@@ -1,0 +1,24 @@
+load ../simplify.maude
+
+fmod TEST is  
+
+    protecting MATRIX-SIMPLIFY .  
+    ops X Y Z : -> MatrixSymbol .
+    ops n m k l p : -> Int .
+    eq X = matrix('X, n by m) .
+    eq Y = matrix('Y, m by n) .
+
+    ops ctxt ctxt2 ctxt3 : -> Context .
+    ops query query2 : -> Context .
+    eq query = X is symmetric . 
+    eq query2 = Y is symmetric .
+    eq ctxt = X is symmetric , X is orthogonal , Y is symmetric .
+    eq ctxt2 = X Y is symmetric , X is orthogonal .
+    eq ctxt3 = X is positive-definite , X is symmetric , Y is orthogonal .
+
+endfm 
+
+red in TEST : matrixof(simplify(transpose(X) with X is symmetric)) == X .
+red in TEST : matrixof(simplify(X transpose(X) with X is orthogonal)) == I .
+red in TEST : matrixof(simplify(transpose(transpose(X)) with no-knowledge)) == I .
+quit

@@ -1,0 +1,47 @@
+load assumptions.maude
+
+fmod MATRIX-SIMPLIFY is 
+    protecting MATRIX-ALGEBRA .  
+    protecting MATRIX-ASSUMPTIONS .  
+    protecting TRUTH-VALUE .
+
+    sort Situation .
+    op _with_ : MatrixExpr Context -> Situation [prec 55] .
+    op simplify : Situation -> Situation .
+    op matrixof : Situation -> MatrixExpr .
+
+    vars X Y : MatrixExpr .
+    var S : MatrixSymbol .
+    var C : Context .
+
+    *** We can treat situtions like MatrixExprs
+    op __ : Situation Situation -> Situation .
+    eq (X with C) (Y with C) = X Y with C .
+    op _+_ : Situation Situation -> Situation .
+    eq (X with C) + (Y with C) = X + Y with C .
+    op transpose : Situation -> Situation .
+    eq transpose(X with C) = transpose(X) with C .
+    op inverse : Situation -> Situation .
+    eq inverse(X with C) = inverse(X) with C .
+
+    *** TRANSPOSES
+    eq simplify(S with C) = S with C .
+    ceq simplify(X transpose(X) with C) = I with C
+        if C => X is orthogonal .
+    ceq simplify(transpose(X) with C) = simplify(X with C) 
+        if C => X is symmetric .
+
+    *** INVERSES
+    ceq simplify(inverse(X) with C) = simplify(transpose(X) with C)
+                                if C => X is orthogonal .
+
+    *** Catch Alls, reduce simplify to sub-terms
+    *** TODO these are currently ambiguous
+    eq simplify(X Y with C) = simplify(X with C) simplify(Y with C) [owise] .
+    eq simplify(X + Y with C) = simplify(X with C) + simplify(Y with C) [owise].
+    eq simplify(transpose(X) with C) = transpose(simplify(X with C)) [owise] .
+    eq simplify(inverse(X) with C) = inverse(simplify(X with C)) [owise] .
+
+    eq matrixof(X with C) = X .
+
+endfm 

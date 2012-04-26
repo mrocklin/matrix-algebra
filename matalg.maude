@@ -88,9 +88,9 @@ fmod MA-ASSUMPTIONS is
     sort Context .
     subsort AppliedPredicate < Context .
 
-    op empty : -> Context [ctor] .  
+    op no-knowledge : -> Context [ctor] .  
     op _,_ : Context Context -> Context  
-            [ctor assoc comm id: empty prec 49 format (d r os d)] .
+            [ctor assoc comm id: no-knowledge prec 49 format (d r os d)] .
 
     ops symmetric orthogonal invertible : -> Predicate .
     ops positive-definite singular : -> Predicate .
@@ -190,7 +190,7 @@ fmod MA-SIMPLIFY is
     protecting TRUTH-VALUE .
 
     sort Situation .
-    op _with_ : MatrixExpr Context -> Situation .
+    op _with_ : MatrixExpr Context -> Situation [prec 55] .
     op simplify : Situation -> Situation .
     op matrixof : Situation -> MatrixExpr .
 

@@ -1,0 +1,85 @@
+load algebra.maude
+
+fmod MATRIX-ASSUMPTIONS is 
+    protecting MATRIX-ALGEBRA .
+    sort Predicate .
+    sort AppliedPredicate .
+    sort Context .
+    subsort AppliedPredicate < Context .
+
+    op no-knowledge : -> Context [ctor] .  
+    op _,_ : Context Context -> Context  
+            [ctor assoc comm id: no-knowledge prec 49 format (d r os d)] .
+
+    ops symmetric orthogonal invertible : -> Predicate .
+    ops positive-definite singular : -> Predicate .
+    ops lower-triangular upper-triangular diagonal tridiagonal : -> Predicate .
+
+    op _is_ : MatrixExpr Predicate -> AppliedPredicate [prec 45].
+
+    var AP : AppliedPredicate . 
+    var C : Context .
+    vars X Y : MatrixExpr .
+
+    *** IMPLICATION
+    op _=>_ : Context AppliedPredicate -> Bool [prec 50] . *** Implies
+    op _<=_ : AppliedPredicate Context -> Bool [prec 50] .
+    op _in_ : AppliedPredicate Context -> Bool [prec 50] .
+    eq AP <= C = C => AP .
+
+    ceq C => AP = true if AP in C .
+
+    *** SYMMETRIC
+    ceq C => X Y is symmetric   = true if C => X is symmetric
+                                      and C => Y is symmetric .
+    ceq C => X + Y is symmetric = true if C => X is symmetric 
+                                      and C => Y is symmetric .
+    ceq C => transpose(X) is symmetric = true if C => X is symmetric .
+    eq C => transpose(X) X is symmetric = true .
+    eq C => X transpose(X) is symmetric = true .
+    ceq C => X Y transpose(X) is symmetric = true if C => Y is symmetric .
+    ceq C => transpose(X) Y X is symmetric = true if C => Y is symmetric .
+
+    *** ORTHOGONAL
+    ceq C => X Y is orthogonal = true if C => X is orthogonal
+                                    and  C => Y is orthogonal .
+    ceq C => X is invertible = true if C => X is orthogonal .
+    ceq C => transpose(X) is orthogonal = true if C => X is orthogonal .
+    ceq C => inverse(X)   is orthogonal = true if C => X is orthogonal .
+
+    *** POSITIVE DEFINITE 
+    ceq C => X Y is positive-definite = true 
+                    if C => X is positive-definite 
+                   and C => Y is positive-definite .     
+    ceq C => X + Y is positive-definite = true
+                    if C => X is positive-definite 
+                   and C => Y is positive-definite .     
+    ceq C => X is positive-definite = true if C => X is orthogonal .
+    ceq C => X is invertible = true if C => X is positive-definite .
+
+    *** SINGULAR
+    ceq C => X is positive-definite = false if C => X is singular == true .
+    ceq C => X is invertible = false if C => X is singular .
+
+    *** TRIANGULAR, DIAGONAL
+    ceq C => X Y is lower-triangular   = true if C => X is lower-triangular 
+                                            and  C => Y is lower-triangular .
+    ceq C => X Y is upper-triangular   = true if C => X is upper-triangular 
+                                            and  C => Y is upper-triangular .
+    ceq C => X + Y is lower-triangular = true if C => X is lower-triangular 
+                                            and  C => Y is lower-triangular .
+    ceq C => X + Y is upper-triangular = true if C => X is upper-triangular 
+                                            and  C => Y is upper-triangular .
+    ceq C => X + Y is diagonal = true if C => X is diagonal 
+                                     and C => Y is diagonal .
+    ceq C => X Y is diagonal   = true if C => X is diagonal 
+                                     and C => Y is diagonal .
+
+
+    *** Catch all - ask for direct membership in the context 
+    eq C => AP = AP in C .
+
+    eq AP in (AP, C) = true .
+    eq AP in C = false [owise] .
+
+endfm

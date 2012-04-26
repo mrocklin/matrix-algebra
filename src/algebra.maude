@@ -1,0 +1,70 @@
+fmod MATRIX-ALGEBRA is
+
+    protecting INT .
+    protecting BOOL .
+    protecting TRUTH-VALUE .
+    protecting QID .
+    sorts MatrixExpr MatrixSymbol . 
+    subsort MatrixSymbol < MatrixExpr . 
+
+    vars A B C X Y : MatrixExpr .
+    var S : MatrixSymbol .
+    vars a b n m : Int .
+    var M : Qid .
+
+    *** MATRIX OPERATIONS
+    ops I Z : -> MatrixSymbol .
+    op matrix : Qid Pair -> MatrixSymbol .
+    op _+_ : MatrixExpr MatrixExpr -> MatrixExpr [ctor assoc comm prec 30] .
+    op __ : MatrixExpr MatrixExpr -> MatrixExpr [ctor prec 25] .
+    op transpose : MatrixExpr -> MatrixExpr [ctor] .
+    op inverse : MatrixExpr -> MatrixExpr [ctor] .
+
+    eq A (B + C) = (A B) + (A C) [metadata "Distributive Law"] . 
+    eq Z + A = A . 
+    eq I A = A .
+    eq A I = A .
+
+    eq transpose(transpose(A)) = A .
+    *** eq transpose(A B) = transpose(B) transpose(A) .
+    *** eq transpose(A + B) = transpose(A) + transpose(B) .
+
+    eq inverse(inverse(A)) = A .
+    eq inverse(A + B) = inverse(A) + inverse(B) .
+    eq inverse(A) A = I .
+    eq A inverse(A) = I .
+    
+    *** SHAPE
+    sort Pair . 
+    op _by_ : Int Int -> Pair .
+    op _==_ : Pair Pair -> Bool .
+    op first : Pair -> Int .
+    op second : Pair -> Int .
+    eq first( n by m ) = n . 
+    eq second( n by m ) = m .
+    vars P1 P2 : Pair .
+    eq (P1 == P2) = (first(P1) == first(P2)) and (second(P1) == second(P2)) .
+
+    op shape : MatrixExpr -> Pair .
+    op rows : MatrixExpr -> Int .
+    op cols : MatrixExpr -> Int .
+    eq rows(A) = first(shape(A)) . 
+    eq cols(A) = second(shape(A)) . 
+
+    op is_square : MatrixExpr -> Bool . 
+    eq is_square(X) = rows(X) == cols(X) .
+
+    eq shape(matrix(M, n by m)) = n by m . 
+    eq shape(A B) = rows(A) by cols(B) .
+    eq shape(A + B) = shape(A) .
+    eq shape(transpose(A)) = cols(A) by rows(A) .
+    eq shape(inverse(A)) = shape(A) .
+
+    op valid : MatrixExpr -> Bool .
+    eq valid(S) = true . *** all symbols are valid
+    eq valid(X Y) = valid(X) and valid(Y) and (cols(X) == rows(Y)) .
+    eq valid(X + Y) = valid(X) and valid(Y) and (shape(X) == shape(Y)) .
+    eq valid(transpose(X)) = valid(X) .
+    eq valid(inverse(X)) = valid(X) and is_square(X) . 
+
+endfm
