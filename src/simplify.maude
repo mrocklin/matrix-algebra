@@ -1,8 +1,8 @@
 load assumptions.maude
 
-fmod MATRIX-SIMPLIFY is 
-    protecting MATRIX-ALGEBRA .  
-    protecting MATRIX-ASSUMPTIONS .  
+fmod MATRIX-SIMPLIFY is
+    protecting MATRIX-ALGEBRA .
+    protecting MATRIX-ASSUMPTIONS .
     protecting TRUTH-VALUE .
 
     sort Situation .
@@ -24,8 +24,9 @@ fmod MATRIX-SIMPLIFY is
     op inverse : Situation -> Situation .
     eq inverse(X with C) = inverse(X) with C .
 
-    *** TRANSPOSES
     eq simplify(S with C) = S with C .
+
+    *** TRANSPOSES
     ceq simplify(X transpose(X) with C) = I with C
         if C => X is orthogonal .
     ceq simplify(transpose(X) with C) = simplify(X with C) 
