@@ -2,15 +2,18 @@ load ../assumptions.maude
 
 fmod TEST is  
     protecting MATRIX-ASSUMPTIONS .  
-    ops X Y : -> MatrixSymbol .
+    ops A B X Y : -> MatrixSymbol .
+    op n : -> Int .
+    eq A = matrix('A , n by n) .
+    eq B = matrix('B , n by n) .
 endfm 
 
 red in TEST : X is symmetric , Y is symmetric => X Y is symmetric .
 red in TEST : X is symmetric => transpose(X) is symmetric .
 red in TEST : no-knowledge => X transpose(X) is symmetric .
-red in TEST : X is positive-definite => X is invertible .
-red in TEST : X is orthogonal , Y is invertible => X Y is invertible .
+red in TEST : A is positive-definite => A is invertible .
+red in TEST : A is orthogonal , B is invertible => A B is invertible .
 red in TEST : no-knowledge => X transpose(X) is symmetric .
-red in TEST : X is invertible => X transpose(X) is positive-definite .
+red in TEST : A is invertible => A transpose(A) is positive-definite .
 
-red in TEST : X is invertible , Y is invertible => X Y is invertible .
+red in TEST : A is invertible , B is invertible => A B is invertible .

@@ -58,12 +58,13 @@ fmod MATRIX-ASSUMPTIONS is
     ceq C => X is invertible = true if C => X is positive-definite .
 
     *** SINGULAR
-    ceq C => X is positive-definite = false if C => X is singular == true .
+    ceq C => X is positive-definite = false if C => X is singular .
     ceq C => X is invertible = false if C => X is singular .
     ceq C => X Y is singular = true if C => X is singular
                                     or C => Y is singular .
 
     *** INVERTIBLE 
+    ceq C => X is invertible = false if is_square(X) == false .
     ceq C => X Y is invertible = true if C => X is invertible 
                                      and C => Y is invertible .
 

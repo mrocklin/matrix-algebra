@@ -18,18 +18,26 @@ M transpose(M) = I if M is orthogonal
 Which allows us to simplify matrix expressions given known facts. For example
 the expression
 
-simplify(transpose(Y X) Y with X is symmetric , Y is orthogonal)
+simplify(transpose(Y X) Y with X is symmetric , Y is orthogonal) + A B
+
 reduces to
-X
+
+X + A B
 
 This algebra and these rules are written in the Maude System, a language for 
 specifying other small languages that handles computation through rewrite 
 rules. As a result much of the code is intended to read like mathematical
 statements. The expressions above are valid statements.
 
-As a disclaimer the equations are not currently confluent. This means that the
-results are dependent on the order in which the equations are applied which, in
-general, is not structured.
+Disclaimer
+==========
+
+This is the first project I've done both in this language and in this paradigm.
+Please don't expect much. 
+
+Also, the equations are not currently confluent. This means that the results 
+are dependent on the order in which the equations are applied which, in 
+general, is not structured. This will eventually be fixed.
 
 Author
 ======
@@ -39,7 +47,9 @@ To Run
 ======
 
 Install the maude system. This can be done on debian/ubuntu systems using
+
 apt-get install maude
 
 Run the tests using 
+
 maude src/tests/*.maude

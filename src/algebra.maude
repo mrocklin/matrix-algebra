@@ -30,7 +30,6 @@ fmod MATRIX-ALGEBRA is
     *** eq transpose(A + B) = transpose(A) + transpose(B) .
 
     eq inverse(inverse(A)) = A .
-    eq inverse(A + B) = inverse(A) + inverse(B) .
     eq inverse(A) A = I .
     eq A inverse(A) = I .
     
