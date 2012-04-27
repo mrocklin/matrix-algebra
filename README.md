@@ -18,7 +18,7 @@ M transpose(M) = I if M is orthogonal
 Which allows us to simplify matrix expressions given known facts. For example
 the expression
 
-simplify(transpose(Y X) Y with X is symmetric , Y is orthogonal) + A B
+simplify(transpose(Y X) Y + A B with X is symmetric , Y is orthogonal) 
 
 reduces to
 
