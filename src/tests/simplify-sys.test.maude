@@ -1,0 +1,18 @@
+load ../simplify-sys.maude
+
+mod TEST is  
+
+    protecting MATRIX-SIMPLIFY-SYS .  
+    ops X Y Z : -> MatrixSymbol .
+    ops n m k l p : -> Int .
+    eq X = matrix('X, n by m) .
+    eq Y = matrix('Y, m by n) .
+
+    var M : MatrixSymbol .
+    var S : Situation .
+    
+endm 
+
+*** search [100, 100] simplify(Y X transpose(X) with X is orthogonal) =>! S .
+search [10, 10] matrixof(simplify(Y X transpose(X) with X is orthogonal))
+              =>* M .

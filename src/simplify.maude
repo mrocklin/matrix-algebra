@@ -38,7 +38,7 @@ fmod MATRIX-SIMPLIFY is
 
     *** Catch Alls, reduce simplify to sub-terms
     *** TODO these are currently ambiguous
-    eq simplify(X Y with C) = simplify(X with C) simplify(Y with C) [owise] .
+    *** eq simplify(X Y with C) = simplify(X with C) simplify(Y with C) [owise] .
     eq simplify(X + Y with C) = simplify(X with C) + simplify(Y with C) [owise].
     eq simplify(transpose(X) with C) = transpose(simplify(X with C)) [owise] .
     eq simplify(inverse(X) with C) = inverse(simplify(X with C)) [owise] .

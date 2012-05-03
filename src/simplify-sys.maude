@@ -1,0 +1,12 @@
+load simplify.maude
+
+mod MATRIX-SIMPLIFY-SYS is
+    extending MATRIX-SIMPLIFY .
+
+    vars X Y Z : MatrixExpr .
+    var C : Context .
+    rl [right] : simplify(X (Y Z) with C) 
+              => simplify(X with C) simplify(Y Z with C) .
+    rl [left]  : simplify(X (Y Z) with C) 
+              => simplify(X Y with C) simplify(Z with C) .
+endm 
