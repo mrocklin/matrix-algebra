@@ -4,16 +4,20 @@ fmod MATRIX-ALGEBRA is
     protecting BOOL .
     protecting TRUTH-VALUE .
     protecting QID .
-    sorts MatrixExpr MatrixSymbol . 
+    sorts MatrixExpr MatrixSymbol Vector RowVector . 
     subsort MatrixSymbol < MatrixExpr . 
+    subsort Vector < MatrixExpr .
+    subsort RowVector < MatrixExpr .
 
     vars A B C X Y : MatrixExpr .
     var S : MatrixSymbol .
     vars a b n m : Int .
     var M : Qid .
+    cmb A : Vector if (cols(A) == 1) /\ A : MatrixExpr .
+    cmb A : RowVector if (rows(A) == 1) /\ A : MatrixExpr .
 
     *** MATRIX OPERATIONS
-    ops I Z : -> MatrixSymbol .
+    ops I Zero : -> MatrixSymbol .
     op matrix : Qid Pair -> MatrixSymbol .
     op _+_ : MatrixExpr MatrixExpr -> MatrixExpr [ctor assoc comm prec 30] .
     op __ : MatrixExpr MatrixExpr -> MatrixExpr [ctor prec 25] .
@@ -21,7 +25,7 @@ fmod MATRIX-ALGEBRA is
     op inverse : MatrixExpr -> MatrixExpr [ctor] .
 
     eq A (B + C) = (A B) + (A C) [metadata "Distributive Law"] . 
-    eq Z + A = A . 
+    eq Zero + A = A . 
     eq I A = A .
     eq A I = A .
 
@@ -66,4 +70,6 @@ fmod MATRIX-ALGEBRA is
     eq valid(transpose(X)) = valid(X) .
     eq valid(inverse(X)) = valid(X) and is_square(X) . 
 
+    *** Catch alls
+    eq valid(X) = false [owise] .
 endfm

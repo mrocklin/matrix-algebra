@@ -2,11 +2,20 @@ load ../algebra.maude
 
 fmod TEST is  
     protecting MATRIX-ALGEBRA .  
-    ops X Y : -> MatrixSymbol .
+
+    ops X Y Z A : -> MatrixSymbol .
     ops n m k : -> Int .
     eq X = matrix('X, n by m) .
     eq Y = matrix('Y, m by k) .
     eq Z = matrix('Y, k by n) .
+    eq A = matrix('A, 1 by n) .
+
+    var v : Vector .
+    var rv : RowVector .
+    op isVector : Vector -> Bool .
+    eq isVector(v) = true .
+    op isRowVector : RowVector -> Bool .
+    eq isRowVector(rv) = true .
 endfm 
 
 red in TEST : shape(X) == n by m .
@@ -19,3 +28,6 @@ red in TEST : valid(X Y Z) .
 red in TEST : valid(Y X) == false .
 red in TEST : valid(X Y + transpose(Z)) .
 
+red in TEST : isVector(transpose(A)) .
+red in TEST : isRowVector(A) .
+red in TEST : isVector(transpose(A X)) .
