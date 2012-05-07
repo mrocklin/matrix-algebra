@@ -20,7 +20,7 @@ fmod MATRIX-ALGEBRA is
     ops I Zero : -> MatrixSymbol .
     op matrix : Qid Pair -> MatrixSymbol .
     op _+_ : MatrixExpr MatrixExpr -> MatrixExpr [ctor assoc comm prec 30] .
-    op __ : MatrixExpr MatrixExpr -> MatrixExpr [ctor prec 25] .
+    op __ : MatrixExpr MatrixExpr -> MatrixExpr [ctor assoc prec 25] .
     op transpose : MatrixExpr -> MatrixExpr [ctor] .
     op inverse : MatrixExpr -> MatrixExpr [ctor] .
 
