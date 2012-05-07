@@ -1,0 +1,16 @@
+load ../code.maude
+
+fmod TEST is 
+
+    protecting LA-LANG .
+    ops X Y : -> Array .
+    ops alpha beta : -> Scalar .
+    ops MM MV SM : -> Fn .
+
+endfm
+
+red in TEST : X .
+red in TEST : X , Y .
+red in TEST : MM(X,Y,alpha); .
+red in TEST : X = MM(X,Y,alpha); .
+

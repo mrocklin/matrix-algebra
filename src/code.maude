@@ -1,0 +1,19 @@
+fmod LA-LANG is
+    
+    sort Fn Var Array Char Scalar .
+    subsort Array Char Scalar < Var .
+    
+    sort ArgList .
+    subsort Var < ArgList .
+    op _,_ : ArgList ArgList -> ArgList [ctor assoc prec 50] .
+
+    sort AppliedFn .
+    op _(_); : Fn ArgList -> AppliedFn [ctor] .
+
+    sort Statement .
+    sort Assignment .
+    subsort Assignment AppliedFn < Statement .
+
+    op _=_ : ArgList AppliedFn -> Assignment .
+
+endfm
