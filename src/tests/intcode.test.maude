@@ -6,5 +6,5 @@ fmod TEST is
     ops a b c : -> Scalar .
 endfm
 
-red in TEST : valid(X = Solve(Y, Z);) . 
-red in TEST : valid(X, Y, Z = SVD(W);) .
+red in TEST : valid(X = Solve(Y, Z)) . 
+red in TEST : valid(X, Y, Z = SVD(W)) .

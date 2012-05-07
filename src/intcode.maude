@@ -10,13 +10,13 @@ fmod INT-CODE is
     vars alpha beta : Scalar .
 
     ops MulAdd Solve : -> Fn .
-    eq valid(W = MulAdd(alpha, X, Y, beta, Z);) = true .
-    eq valid(Z = Solve(X, Y);) = true . 
+    eq valid(W = MulAdd(alpha, X, Y, beta, Z)) = true .
+    eq valid(Z = Solve(X, Y)) = true . 
 
     ops LU Eig SVD : -> Fn .
-    eq valid(L, U = LU(X);) = true .
-    eq valid(U, S, V = SVD(X);) = true .
-    eq valid(X, Y = Eig(Z); ) = true . 
+    eq valid(L, U = LU(X)) = true .
+    eq valid(U, S, V = SVD(X)) = true .
+    eq valid(X, Y = Eig(Z) ) = true . 
 
     vars Stmt : Statement .
     eq valid(Stmt) = false [owise] .
