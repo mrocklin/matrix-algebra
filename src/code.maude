@@ -8,12 +8,16 @@ fmod CODE is
     op _,_ : ArgList ArgList -> ArgList [ctor assoc prec 50] .
 
     sort AppliedFn .
-    op _(_); : Fn ArgList -> AppliedFn [ctor] .
+    op _(_) : Fn ArgList -> AppliedFn [ctor] .
 
     sort Statement .
     sort Assignment .
     subsort Assignment AppliedFn < Statement .
 
     op _=_ : ArgList AppliedFn -> Assignment [ctor prec 55] .
+
+    sort Program . 
+    subsort Statement < Program .
+    op _;_ : Program Program -> Program [ctor assoc prec 60] .
 
 endfm

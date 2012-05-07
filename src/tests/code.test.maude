@@ -11,6 +11,9 @@ endfm
 
 red in TEST : X .
 red in TEST : X , Y .
-red in TEST : MM(X,Y,alpha); .
-red in TEST : X = MM(X,Y,alpha); .
+red in TEST : MM(X,Y,alpha) .
+red in TEST : X = MM(X,Y,alpha) .
+red in TEST : X = MM(X,Y,alpha); 
+              X = SM(X);
+              Y = SM(X) .
 
