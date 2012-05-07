@@ -1,0 +1,10 @@
+load ../intcode.maude
+
+fmod TEST is 
+    protecting INT-CODE .
+    ops W X Y Z : -> Array .
+    ops a b c : -> Scalar .
+endfm
+
+red in TEST : valid(X = Solve(Y, Z);) . 
+red in TEST : valid(X, Y, Z = SVD(W);) .

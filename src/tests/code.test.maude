@@ -2,7 +2,7 @@ load ../code.maude
 
 fmod TEST is 
 
-    protecting LA-LANG .
+    protecting CODE .
     ops X Y : -> Array .
     ops alpha beta : -> Scalar .
     ops MM MV SM : -> Fn .
