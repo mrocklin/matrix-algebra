@@ -1,6 +1,6 @@
-fmod LA-LANG is
+fmod CODE is
     
-    sort Fn Var Array Char Scalar .
+    sort Fn Var Array Scalar Char .
     subsort Array Char Scalar < Var .
     
     sort ArgList .
@@ -14,6 +14,6 @@ fmod LA-LANG is
     sort Assignment .
     subsort Assignment AppliedFn < Statement .
 
-    op _=_ : ArgList AppliedFn -> Assignment .
+    op _=_ : ArgList AppliedFn -> Assignment [ctor prec 55] .
 
 endfm
