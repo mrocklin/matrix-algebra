@@ -39,7 +39,7 @@ fmod MATRIX-ALGEBRA is
     
     *** SHAPE
     sort Pair . 
-    op _by_ : Int Int -> Pair .
+    op _by_ : Int Int -> Pair [ctor prec 15].
     op _==_ : Pair Pair -> Bool .
     op first : Pair -> Int .
     op second : Pair -> Int .

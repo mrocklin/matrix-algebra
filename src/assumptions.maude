@@ -4,30 +4,36 @@ fmod MATRIX-ASSUMPTIONS is
     protecting MATRIX-ALGEBRA .
     sort Predicate .
     sort AppliedPredicate .
-    sort Context .
-    subsort AppliedPredicate < Context .
+    sorts Context NeContext .
+    subsort AppliedPredicate < NeContext < Context .
 
     op no-knowledge : -> Context [ctor] .  
     op _,_ : Context Context -> Context  
             [ctor assoc comm id: no-knowledge prec 49 format (d r os d)] .
+    op _,_ : NeContext NeContext -> NeContext  
+            [ditto] .
 
     ops symmetric orthogonal invertible : -> Predicate .
     ops positive-definite singular : -> Predicate .
-    ops lower-triangular upper-triangular diagonal tridiagonal : -> Predicate .
+    ops lower-triangular upper-triangular triangular : -> Predicate .
+    ops diagonal tridiagonal : -> Predicate .
 
     op _is_ : MatrixExpr Predicate -> AppliedPredicate [prec 45].
 
     var AP : AppliedPredicate . 
     var C : Context .
+    var D E : NeContext .
     vars X Y : MatrixExpr .
 
     *** IMPLICATION
-    op _=>_ : Context AppliedPredicate -> Bool [prec 50] . *** Implies
+    op _=>_ : Context Context -> Bool [prec 50] . *** Implies
     op _<=_ : AppliedPredicate Context -> Bool [prec 50] .
     op _in_ : AppliedPredicate Context -> Bool [prec 50] .
     eq AP <= C = C => AP .
 
+    eq C => no-knowledge = true .
     ceq C => AP = true if AP in C .
+    ceq C => D , E = true if C => D and C => E .
 
     *** SYMMETRIC
     ceq C => X Y is symmetric   = true if C => X is symmetric
@@ -81,6 +87,8 @@ fmod MATRIX-ASSUMPTIONS is
                                      and C => Y is diagonal .
     ceq C => X Y is diagonal   = true if C => X is diagonal 
                                      and C => Y is diagonal .
+    ceq C => X is triangular = true if C => X is lower-triangular 
+                                    or C => X is upper-triangular .
 
 
     *** Catch all - ask for direct membership in the context 
