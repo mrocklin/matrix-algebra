@@ -19,3 +19,4 @@ red in TEST : A is invertible , B is invertible => A B is invertible .
 red in TEST : A is symmetric , A is positive-definite , B is orthogonal 
            => B A transpose(B) is symmetric , 
               B A transpose(B) is positive-definite .
+red in TEST : A is diagonal => A is triangular .
