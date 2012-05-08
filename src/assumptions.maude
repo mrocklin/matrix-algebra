@@ -83,6 +83,10 @@ fmod MATRIX-ASSUMPTIONS is
                                             and  C => Y is lower-triangular .
     ceq C => X + Y is upper-triangular = true if C => X is upper-triangular 
                                             and  C => Y is upper-triangular .
+    ceq C => transpose(X) is upper-triangular = true 
+                                                if C => X is lower-triangular .
+    ceq C => transpose(X) is lower-triangular = true 
+                                                if C => X is upper-triangular .
     ceq C => X + Y is diagonal = true if C => X is diagonal 
                                      and C => Y is diagonal .
     ceq C => X Y is diagonal   = true if C => X is diagonal 
@@ -91,6 +95,8 @@ fmod MATRIX-ASSUMPTIONS is
                                     or C => X is upper-triangular .
     ceq C => X is upper-triangular = true if C => X is diagonal .
     ceq C => X is lower-triangular = true if C => X is diagonal .
+
+    ceq C => transpose(X) is diagonal = true if C => X is diagonal .
 
     *** Catch all - ask for direct membership in the context 
     eq C => AP = AP in C .
