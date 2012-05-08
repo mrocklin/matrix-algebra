@@ -21,6 +21,7 @@ fmod MATRIX-ALGEBRA is
     op matrix : Qid Pair -> MatrixSymbol .
     op _+_ : MatrixExpr MatrixExpr -> MatrixExpr [ctor assoc id Zero comm prec 30] .
     op __ : MatrixExpr MatrixExpr -> MatrixExpr [ctor assoc prec 25] .
+    op _\_ : MatrixExpr MatrixExpr -> MatrixExpr [ctor assoc prec 25] .
     op transpose : MatrixExpr -> MatrixExpr [ctor] .
     op inverse : MatrixExpr -> MatrixExpr [ctor] .
 
@@ -62,6 +63,7 @@ fmod MATRIX-ALGEBRA is
     eq shape(A + B) = shape(A) .
     eq shape(transpose(A)) = cols(A) by rows(A) .
     eq shape(inverse(A)) = shape(A) .
+    eq shape(A \ B) = cols(A) by cols(B) .
 
     op valid : MatrixExpr -> Bool .
     eq valid(S) = true . *** all symbols are valid
@@ -69,6 +71,7 @@ fmod MATRIX-ALGEBRA is
     eq valid(X + Y) = valid(X) and valid(Y) and (shape(X) == shape(Y)) .
     eq valid(transpose(X)) = valid(X) .
     eq valid(inverse(X)) = valid(X) and is_square(X) . 
+    eq valid(X \ Y) = rows(X) == rows(Y) and valid(X) and valid(Y) .
 
     *** Catch alls
     eq valid(X) = false [owise] .
