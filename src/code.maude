@@ -1,7 +1,7 @@
 fmod CODE is
     
-    sort Fn Var Array Scalar Char .
-    subsort Array Char Scalar < Var .
+    sort Fn Var Array Scalar char .
+    subsort Array char Scalar < Var .
     
     sort ArgList .
     subsort Var < ArgList .

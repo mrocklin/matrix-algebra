@@ -1,0 +1,46 @@
+load algebra.maude
+load intcode.maude
+load lib/gen-tree.maude
+load lib/list-cons.maude
+
+view Assignment from TRIV to INT-CODE is  
+  sort Elt to Assignment .  
+endv
+
+
+
+fmod ALG-TO-CODE is 
+    protecting MATRIX-ALGEBRA .
+    protecting INT-CODE .
+    protecting GEN-TREE{Assignment} .
+    protecting STRING .
+
+    subsort String < Var .    
+    
+    vars X Y Z : MatrixExpr .
+    vars Sym : MatrixSymbol .
+    var v : String .
+    
+    op _=_ : String MatrixExpr -> Assignment .
+
+    op translate : MatrixExpr String -> Tree{Assignment} .
+    op tr : MatrixExpr String -> Tree{Assignment} .
+    eq tr(X , v) = translate(X , v) .
+
+    eq translate(inverse(X) Y , v) = ( v = Solve(v + "1", v + "2") ) [tr(X, v + "1") : tr(Y , v + "2") : empty-forest] . 
+    eq translate(X Y + Z , v) = 
+        (v = MulAdd(v + "1", v + "2" , v + "3")) [ tr(X , v + "1") : tr(Y , v + "2") : tr(Z , v + "3" ) : empty-forest] .
+    eq translate(X Y , v) = 
+        (v = MulAdd(v + "1", v + "2" , "0")) [ tr(X , v + "1") : tr(Y , v + "2") : empty-forest] .
+    eq translate(Sym , v) = (v = Sym) [empty-forest] .
+    eq translate(transpose(Sym) , v) = (v = transpose(Sym)) [empty-forest] .
+
+endfm
+
+fmod TEST is 
+    protecting ALG-TO-CODE .
+    ops X Y Z : -> MatrixSymbol .
+endfm
+
+red in TEST : translate(inverse(X transpose(X)) X + Z transpose(Z) , "var") .
+
