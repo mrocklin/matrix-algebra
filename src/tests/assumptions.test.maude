@@ -15,5 +15,12 @@ red in TEST : A is positive-definite => A is invertible .
 red in TEST : A is orthogonal , B is invertible => A B is invertible .
 red in TEST : no-knowledge => X transpose(X) is symmetric .
 red in TEST : A is invertible => A transpose(A) is positive-definite .
-
 red in TEST : A is invertible , B is invertible => A B is invertible .
+
+red in TEST : A is symmetric , A is positive-definite , B is orthogonal 
+           => B A transpose(B) is symmetric , 
+              B A transpose(B) is positive-definite .
+red in TEST : A is diagonal => A is triangular .
+
+red in TEST : A is diagonal => A is upper-triangular , A is lower-triangular .
+red in TEST : A is lower-triangular => transpose(A) is upper-triangular .

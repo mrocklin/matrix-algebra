@@ -1,39 +1,37 @@
-load algebra.maude
+load simplify.maude
 load intcode.maude
 load lib/gen-tree.maude
 load lib/list-cons.maude
 
-view Assignment from TRIV to INT-CODE is  
-  sort Elt to Assignment .  
+view Statement from TRIV to INT-CODE is  
+  sort Elt to Statement .  
 endv
 
-
-
 fmod ALG-TO-CODE is 
-    protecting MATRIX-ALGEBRA .
+    protecting MATRIX-SIMPLIFY .
     protecting INT-CODE .
-    protecting GEN-TREE{Assignment} .
+    protecting GEN-TREE{Statement} .
     protecting STRING .
 
     subsort String < Var .    
     
     vars X Y Z : MatrixExpr .
     vars Sym : MatrixSymbol .
+    vars L M N O : MatrixSymbol .
+    var C : Context .
     var v : String .
     
-    op _=_ : String MatrixExpr -> Assignment .
+    op _:=_ : String MatrixExpr -> Statement .
+    op TRSM : -> Fn .
 
-    op translate : MatrixExpr String -> Tree{Assignment} .
-    op tr : MatrixExpr String -> Tree{Assignment} .
-    eq tr(X , v) = translate(X , v) .
+    op translate : Situation Var -> Tree{Statement} .
+    op tr : Situation Var -> Tree{Statement} .
+    eq tr(X with C , v) = translate(X with C , v) .
 
-    eq translate(inverse(X) Y , v) = ( v = Solve(v + "1", v + "2") ) [tr(X, v + "1") : tr(Y , v + "2") : empty-forest] . 
-    eq translate(X Y + Z , v) = 
-        (v = MulAdd(v + "1", v + "2" , v + "3")) [ tr(X , v + "1") : tr(Y , v + "2") : tr(Z , v + "3" ) : empty-forest] .
-    eq translate(X Y , v) = 
-        (v = MulAdd(v + "1", v + "2" , "0")) [ tr(X , v + "1") : tr(Y , v + "2") : empty-forest] .
-    eq translate(Sym , v) = (v = Sym) [empty-forest] .
-    eq translate(transpose(Sym) , v) = (v = transpose(Sym)) [empty-forest] .
+    eq translate(Sym with C , v) = (v := Sym) [empty-forest] .
+    ceq translate(X \ Y with C , v) =  v := TRSM(L, M) [tr(X with C, L) : tr(Y with C, M) : empty-forest] 
+        if C => X is triangular . 
+    ***(eq translate(inverse(X) Y , v) = ( v = Solve(v + "1", v + "2") ) [tr(X, v + "1") : tr(Y , v + "2") : empty-forest] . 
 
 endfm
 
@@ -42,5 +40,5 @@ fmod TEST is
     ops X Y Z : -> MatrixSymbol .
 endfm
 
-red in TEST : translate(inverse(X transpose(X)) X + Z transpose(Z) , "var") .
-
+red in TEST : translate(X \ Y with X is upper-triangular, "var") .
+*** red in TEST : translate(inverse(X transpose(X)) X + Z transpose(Z) , "var") .
