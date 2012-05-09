@@ -20,10 +20,12 @@ fmod MATRIX-ASSUMPTIONS is
 
     op _is_ : MatrixExpr Predicate -> AppliedPredicate [prec 45].
 
+    var P : Predicate .
     var AP : AppliedPredicate . 
     var C : Context .
     var D E : NeContext .
     vars X Y : MatrixExpr .
+    var alpha : Scalar .
 
     *** IMPLICATION
     op _=>_ : Context Context -> Bool [prec 50] . *** Implies
@@ -34,6 +36,8 @@ fmod MATRIX-ASSUMPTIONS is
     eq C => no-knowledge = true .
     ceq C => AP = true if AP in C .
     ceq C => D , E = true if C => D and C => E .
+
+    eq C => alpha X is P = C => X is P . *** Scalars don't matter (mostly) 
 
     *** SYMMETRIC
     ceq C => X Y is symmetric   = true if C => X is symmetric
