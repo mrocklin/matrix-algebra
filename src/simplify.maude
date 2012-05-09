@@ -28,7 +28,8 @@ fmod MATRIX-SIMPLIFY is
     eq simplify(S with C) = S with C .
 
     *** Bring scalars out of simplify 
-    eq simplify(alpha X with C) = alpha matrixof(simplify(X with C)) with C .
+    ceq simplify(alpha X with C) = alpha matrixof(simplify(X with C)) with C 
+                                                        if alpha =/= 1 .
 
     *** TRANSPOSES
     ceq simplify(X transpose(X) with C) = I with C

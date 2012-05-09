@@ -36,8 +36,9 @@ fmod MATRIX-ASSUMPTIONS is
     eq C => no-knowledge = true .
     ceq C => AP = true if AP in C .
     ceq C => D , E = true if C => D and C => E .
-
-    eq C => alpha X is P = C => X is P . *** Scalars don't matter (mostly) 
+    
+    *** Scalars don't matter (mostly) 
+    ceq C => alpha X is P = C => X is P        if alpha =/= 1 . 
 
     *** SYMMETRIC
     ceq C => X Y is symmetric   = true if C => X is symmetric

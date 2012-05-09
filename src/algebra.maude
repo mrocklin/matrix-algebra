@@ -5,47 +5,48 @@ fmod MATRIX-ALGEBRA is
     protecting TRUTH-VALUE .
     protecting QID .
     sorts MatrixExpr MatrixSymbol Vector RowVector . 
-    subsort MatrixSymbol < MatrixExpr . 
-    subsort Vector < MatrixExpr .
-    subsort RowVector < MatrixExpr .
+    subsort Vector RowVector MatrixSymbol < MatrixExpr . 
+
     sort Scalar .
     subsort Int < Scalar .
+    vars a b n m : Int .
+    var alpha : Scalar .
 
     vars A B C X Y : MatrixExpr .
     var S : MatrixSymbol .
-    vars a b n m : Int .
-    var alpha beta : Scalar .
     var M : Qid .
-    cmb A : Vector if (cols(A) == 1) /\ A : MatrixExpr .
-    cmb A : RowVector if (rows(A) == 1) /\ A : MatrixExpr .
+
+    *** Vector sorts are conditional 
+    cmb A : Vector if (cols(A) == 1) .
+    cmb A : RowVector if (rows(A) == 1) .
 
     *** MATRIX OPERATIONS
     ops I Zero : -> MatrixSymbol .
     op matrix : Qid Pair -> MatrixSymbol .
-    op _+_ : MatrixExpr MatrixExpr -> MatrixExpr [ctor assoc id Zero comm prec 30] .
+
+    op _+_ : MatrixExpr MatrixExpr -> MatrixExpr [ctor assoc comm prec 30] .
     op __ : MatrixExpr MatrixExpr -> MatrixExpr [ctor assoc prec 25] .
-    op __ : Scalar MatrixExpr -> MatrixExpr [ctor assoc prec 25] .
-    op __ : Scalar Scalar -> Scalar [ctor assoc prec 25] .
+    op __ : Scalar MatrixExpr -> MatrixExpr [ctor left id: 1 prec 25] .
+    op __ : Scalar Scalar -> Scalar [ctor assoc comm prec 25] .
     op _\_ : MatrixExpr MatrixExpr -> MatrixExpr [ctor assoc prec 25] .
+
     op transpose : MatrixExpr -> MatrixExpr [ctor] .
     op inverse : MatrixExpr -> MatrixExpr [ctor] .
 
     eq A (B + C) = (A B) + (A C) [metadata "Distributive Law"] . 
-    eq Zero + A = A . 
-    eq I A = A .
-    eq A I = A .
 
-    eq n m = n * m .
-    eq X (alpha Y) = alpha (X Y) .
+    eq n m = n * m [metadata "Rely on multiply defined in INT"] .
+    ceq X (alpha Y) = alpha (X Y) if alpha =/= 1 [metadata "Scalars to Front"] .
 
     eq transpose(transpose(A)) = A .
-    eq transpose(alpha A) = alpha transpose(A) .
+    ceq transpose(alpha A) = alpha transpose(A) if alpha =/= 1 .
     *** eq transpose(A B) = transpose(B) transpose(A) .
     *** eq transpose(A + B) = transpose(A) + transpose(B) .
 
     eq inverse(inverse(A)) = A .
     eq inverse(A) A = I .
     eq A inverse(A) = I .
+    eq I \ X = X .
     
     *** SHAPE
     sort Pair . 
@@ -73,7 +74,7 @@ fmod MATRIX-ALGEBRA is
     eq shape(transpose(A)) = cols(A) by rows(A) .
     eq shape(inverse(A)) = shape(A) .
     eq shape(A \ B) = cols(A) by cols(B) .
-    eq shape(alpha A) = shape(A) .
+    ceq shape(alpha A) = shape(A) if alpha =/= 1 .
 
     op valid : MatrixExpr -> Bool .
     eq valid(S) = true . *** all symbols are valid
@@ -82,7 +83,7 @@ fmod MATRIX-ALGEBRA is
     eq valid(transpose(X)) = valid(X) .
     eq valid(inverse(X)) = valid(X) and is_square(X) . 
     eq valid(X \ Y) = rows(X) == rows(Y) and valid(X) and valid(Y) .
-    eq valid(alpha X) = valid(X) . 
+    ceq valid(alpha X) = valid(X) if alpha =/= 1 . 
 
     *** Catch alls
     eq valid(X) = false [owise] .

@@ -28,6 +28,7 @@ red in TEST : shape(X Y) == n by k .
 red in TEST : (shape(transpose(X))) == (m by n) .
 red in TEST : shape(W \ X) == k by m .
 red in TEST : shape(a X) == shape(X) .
+red in TEST : shape(2 X) == shape(X) .
 
 red in TEST : valid(X Y Z) .
 red in TEST : valid(Y X) == false .
