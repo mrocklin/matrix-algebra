@@ -8,10 +8,13 @@ fmod MATRIX-ALGEBRA is
     subsort MatrixSymbol < MatrixExpr . 
     subsort Vector < MatrixExpr .
     subsort RowVector < MatrixExpr .
+    sort Scalar .
+    subsort Int < Scalar .
 
     vars A B C X Y : MatrixExpr .
     var S : MatrixSymbol .
     vars a b n m : Int .
+    var alpha beta : Scalar .
     var M : Qid .
     cmb A : Vector if (cols(A) == 1) /\ A : MatrixExpr .
     cmb A : RowVector if (rows(A) == 1) /\ A : MatrixExpr .
@@ -21,6 +24,8 @@ fmod MATRIX-ALGEBRA is
     op matrix : Qid Pair -> MatrixSymbol .
     op _+_ : MatrixExpr MatrixExpr -> MatrixExpr [ctor assoc id Zero comm prec 30] .
     op __ : MatrixExpr MatrixExpr -> MatrixExpr [ctor assoc prec 25] .
+    op __ : Scalar MatrixExpr -> MatrixExpr [ctor assoc prec 25] .
+    op __ : Scalar Scalar -> Scalar [ctor assoc prec 25] .
     op _\_ : MatrixExpr MatrixExpr -> MatrixExpr [ctor assoc prec 25] .
     op transpose : MatrixExpr -> MatrixExpr [ctor] .
     op inverse : MatrixExpr -> MatrixExpr [ctor] .
@@ -30,7 +35,11 @@ fmod MATRIX-ALGEBRA is
     eq I A = A .
     eq A I = A .
 
+    eq n m = n * m .
+    eq X (alpha Y) = alpha (X Y) .
+
     eq transpose(transpose(A)) = A .
+    eq transpose(alpha A) = alpha transpose(A) .
     *** eq transpose(A B) = transpose(B) transpose(A) .
     *** eq transpose(A + B) = transpose(A) + transpose(B) .
 
@@ -64,6 +73,7 @@ fmod MATRIX-ALGEBRA is
     eq shape(transpose(A)) = cols(A) by rows(A) .
     eq shape(inverse(A)) = shape(A) .
     eq shape(A \ B) = cols(A) by cols(B) .
+    eq shape(alpha A) = shape(A) .
 
     op valid : MatrixExpr -> Bool .
     eq valid(S) = true . *** all symbols are valid
@@ -72,6 +82,7 @@ fmod MATRIX-ALGEBRA is
     eq valid(transpose(X)) = valid(X) .
     eq valid(inverse(X)) = valid(X) and is_square(X) . 
     eq valid(X \ Y) = rows(X) == rows(Y) and valid(X) and valid(Y) .
+    eq valid(alpha X) = valid(X) . 
 
     *** Catch alls
     eq valid(X) = false [owise] .

@@ -17,6 +17,8 @@ fmod TEST is
     eq isVector(v) = true .
     op isRowVector : RowVector -> Bool .
     eq isRowVector(rv) = true .
+
+    ops a b c : -> Scalar .
 endfm 
 
 red in TEST : shape(X) == n by m .
@@ -25,13 +27,19 @@ red in TEST : cols(X) == m .
 red in TEST : shape(X Y) == n by k .
 red in TEST : (shape(transpose(X))) == (m by n) .
 red in TEST : shape(W \ X) == k by m .
+red in TEST : shape(a X) == shape(X) .
 
 red in TEST : valid(X Y Z) .
 red in TEST : valid(Y X) == false .
 red in TEST : valid(X Y + transpose(Z)) .
+red in TEST : valid(a X Y) .
 
 red in TEST : valid(W \ X) .
 
 red in TEST : isVector(transpose(A)) .
 red in TEST : isRowVector(A) .
 red in TEST : isVector(transpose(A X)) .
+
+red in TEST : isVector(a transpose(A)) .
+
+red in TEST : 5 3 == 15 .
