@@ -1,0 +1,54 @@
+load lib/gen-tree.maude
+load simplify.maude
+
+***(
+view Statement from TRIV to COMPUTE is
+  sort Elt to Statement .
+endv
+)
+mod COMPUTE is 
+    protecting MATRIX-SIMPLIFY .
+    *** protecting GEN-TREE{Statement} .
+    protecting STRING .
+
+    *** sort Statement .
+    sort Array .
+    sort Exp
+    sort Arg .
+    subsort String < Arg .
+
+
+    *** Some utility functions
+    var X : MatrixExpr .
+    op trans : MatrixExpr -> Char . 
+    eq trans(transpose(X)) = "T" .
+    eq trans(X) = "N" [owise] . 
+    op LD : MatrixExpr -> Nat .
+    eq LD(transpose(X)) = rows(X) . 
+    eq LD(X) = rows(X) [owise] .
+
+    vars A B C D : MatrixExpr .
+    vars alpha beta : Scalar .
+
+    *** SUBROUTINE SGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+    op GEMM : Char Char Nat Nat Nat Scalar Array Nat Array Nat Scalar Array Nat
+           -> Array .
+    
+    *** SUBROUTINE STRSM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+    op TRSM : Char Char Char Char Nat Nat Scalar Array Nat Array Nat 
+           -> Array .
+
+    op compute : MatrixExpr -> Array .
+
+    rl [GEMM] : compute(alpha A B + beta C) 
+              => GEMM(trans(A), trans(B), rows(A), cols(B), cols(A), alpha,
+              compute(A), LD(A), compute(B), LD(B), beta, compute(C), LD(C)) .
+
+    ops T R S : -> MatrixSymbol .
+    eq T = matrix('T, 10 by 10) . 
+    eq R = matrix('R, 10 by 5) . 
+    eq S = matrix('S, 10 by 5) .
+endm
+
+search [10, 10] compute(3 T R + 2 S) =>! A:Array .
+search [10, 10] compute(3 transpose(T) R + 2 S) =>! A:Array .
