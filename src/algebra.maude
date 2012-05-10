@@ -50,13 +50,10 @@ fmod MATRIX-ALGEBRA is
     *** SHAPE
     sort Pair . 
     op _by_ : Int Int -> Pair [ctor prec 15].
-    op _==_ : Pair Pair -> Bool .
     op first : Pair -> Int .
     op second : Pair -> Int .
     eq first( n by m ) = n . 
     eq second( n by m ) = m .
-    vars P1 P2 : Pair .
-    eq (P1 == P2) = (first(P1) == first(P2)) and (second(P1) == second(P2)) .
 
     op shape : MatrixExpr -> Pair .
     op rows : MatrixExpr -> Int .
