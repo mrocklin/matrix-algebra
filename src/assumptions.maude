@@ -16,6 +16,7 @@ fmod MATRIX-ASSUMPTIONS is
     ops symmetric orthogonal invertible : -> Predicate .
     ops positive-definite singular : -> Predicate .
     ops lower-triangular upper-triangular triangular : -> Predicate .
+    op unit-triangular : -> Predicate .
     ops diagonal tridiagonal : -> Predicate .
 
     op _is_ : MatrixExpr Predicate -> AppliedPredicate [prec 45].
