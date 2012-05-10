@@ -21,7 +21,7 @@ mod COMPUTE is
 
     *** Some utility functions
     var X : MatrixExpr .
-    op trans : MatrixExpr -> Char . 
+    op TRANS : MatrixExpr -> Char . 
     eq TRANS(transpose(X)) = "T" .
     eq TRANS(X) = "N" [owise] . 
 
@@ -34,11 +34,11 @@ mod COMPUTE is
     ceq Side(A, B, Facts) = "R" if Facts => B is symmetric .
 
     op UPLO : Situation -> Char .
-    ceq UPLO(X with Facts) = "U" if X is upper-triangular .
-    ceq UPLO(X with Facts) = "L" if X is lower-triangular .
+    ceq UPLO(X with Facts) = "U" if Facts => X is upper-triangular .
+    ceq UPLO(X with Facts) = "L" if Facts => X is lower-triangular .
 
     op DIAG : Situation -> Char .
-    ceq DIAG(X with Facts) = "U" if X is unit-triangular .
+    ceq DIAG(X with Facts) = "U" if Facts => X is unit-triangular .
     eq DIAG(X with Facts)  = "N" [owise] .
 
 
@@ -80,8 +80,9 @@ mod COMPUTE is
                   Facts => A is symmetric or Facts => B is symmetric .
 
     crl [TRSM] : compute(A \ (alpha B) with Facts) 
-            => TRSM("L", UPLO(A), TRANS(A), DIAG(A), rows(B), cols(B), alpha,
-            compute(A with Facts), LD(A), compute(B with Facts), LD(B))
+            => TRSM("L", UPLO(A with Facts), TRANS(A), DIAG(A with Facts),
+            rows(B), cols(B), alpha, compute(A with Facts), LD(A), 
+            compute(B with Facts), LD(B))
             if
                 Facts => A is triangular .
 
@@ -95,7 +96,9 @@ mod COMPUTE is
 endm
 
 search [10, 10] compute(3 T R + 2 S with no-knowledge) =>! A:Array .
-search [100, 100] compute(T \ (gamma R)  with T is lower-triangular) =>! A:Array .
-search [10, 10] compute(3 transpose(T) R + 2 S with R is symmetric ) =>! A:Array .
+search [100, 100] compute(T \ (gamma R)  with T is lower-triangular) 
+        =>! A:Array .
+search [10, 10] compute(3 transpose(T) R + 2 S with R is symmetric ) 
+        =>! A:Array .
 ***search [100, 100] compute(U transpose(U) V + 3 V + 3 transpose(T) R + 2 S) =>! A:Array .
 
