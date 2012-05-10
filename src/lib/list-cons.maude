@@ -46,9 +46,11 @@
     protecting LIST-CONS{String} .
   endfm
     
+***(
 red reverse("one" : "two" : "three" : []) .
 ---(
 reduce in LIST-CONS-TEST : reverse("one" : "two" : "three" : []) .
 rewrites: 10 in 0ms cpu (0ms real) (~ rewrites/second)
 result NeList{String}: "three" : "two" : "one" : []
 ---)    
+)

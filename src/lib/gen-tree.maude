@@ -57,6 +57,7 @@
     protecting GEN-TREE{Int} .
   endfm
 
+***(
 red postorder(
         1 [ 3 [ 4 [ empty-forest ] : empty-forest ] 
                   : (2 [ empty-forest ] : empty-forest) ]) .
@@ -66,3 +67,4 @@ reduce in GEN-TREE-TEST : postorder(1[3[4[empty-forest] : empty-forest] : 2[
 rewrites: 26 in 0ms cpu (0ms real) (~ rewrites/second)
 result NeList{Int}: 4 : 3 : 2 : 1 : []
 ---)
+)
