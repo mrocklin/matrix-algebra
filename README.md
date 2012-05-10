@@ -35,10 +35,6 @@ Disclaimer
 This is the first project I've done both in this language and in this paradigm.
 Please don't expect much. 
 
-Also, the equations are not currently confluent. This means that the results 
-are dependent on the order in which the equations are applied which, in 
-general, is not structured. This will eventually be fixed.
-
 Author
 ======
 Matthew Rocklin
