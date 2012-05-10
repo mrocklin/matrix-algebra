@@ -79,12 +79,13 @@ mod COMPUTE is
               if 
                   Facts => A is symmetric or Facts => B is symmetric .
 
+    *** This has issues. BLAS over-writes solution onto B. need to make copy
     crl [TRSM] : compute(A \ (alpha B) with Facts) 
             => TRSM("L", UPLO(A with Facts), TRANS(A), DIAG(A with Facts),
             rows(B), cols(B), alpha, compute(A with Facts), LD(A), 
             compute(B with Facts), LD(B))
             if
-                Facts => A is triangular .
+                A is triangular <= Facts .
 
     ops T R S U V : -> MatrixSymbol .
     eq U = matrix('U, 10 by 10) . 
