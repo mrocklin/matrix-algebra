@@ -1,16 +1,15 @@
 fmod MATRIX-ALGEBRA is
 
     protecting INT .
+    protecting FLOAT .
     protecting BOOL .
     protecting TRUTH-VALUE .
     protecting QID .
     sorts MatrixExpr MatrixSymbol Vector RowVector . 
     subsort Vector RowVector MatrixSymbol < MatrixExpr . 
 
-    sort Scalar .
-    subsort Int < Scalar .
-    vars a b n m : Int .
-    var alpha : Scalar .
+    vars n m a b : Int .
+    vars alpha beta : Float .
 
     vars A B C X Y : MatrixExpr .
     var S : MatrixSymbol .
@@ -26,8 +25,8 @@ fmod MATRIX-ALGEBRA is
 
     op _+_ : MatrixExpr MatrixExpr -> MatrixExpr [ctor assoc comm prec 30] .
     op __ : MatrixExpr MatrixExpr -> MatrixExpr [ctor assoc prec 25] .
-    op __ : Scalar MatrixExpr -> MatrixExpr [ctor left id: 1 prec 25] .
-    op __ : Scalar Scalar -> Scalar [ctor assoc comm prec 25] .
+    op __ : Float MatrixExpr -> MatrixExpr [ctor left id: 1.0 prec 25] .
+    op __ : Float Float -> Float [ctor assoc comm prec 25] .
     op _\_ : MatrixExpr MatrixExpr -> MatrixExpr [ctor assoc prec 25] .
 
     op transpose : MatrixExpr -> MatrixExpr [ctor] .
@@ -35,11 +34,11 @@ fmod MATRIX-ALGEBRA is
 
     eq A (B + C) = (A B) + (A C) [metadata "Distributive Law"] . 
 
-    eq n m = n * m [metadata "Rely on multiply defined in INT"] .
-    ceq X (alpha Y) = alpha (X Y) if alpha =/= 1 [metadata "Scalars to Front"] .
+    eq alpha beta = alpha * beta [metadata "Rely on mul defined in FLOAT"] .
+    ceq X (alpha Y) = alpha (X Y) if alpha =/= 1.0 [metadata "Scalars to Front"] .
 
     eq transpose(transpose(A)) = A .
-    ceq transpose(alpha A) = alpha transpose(A) if alpha =/= 1 .
+    ceq transpose(alpha A) = alpha transpose(A) if alpha =/= 1.0 .
     *** eq transpose(A B) = transpose(B) transpose(A) .
     *** eq transpose(A + B) = transpose(A) + transpose(B) .
 
@@ -74,7 +73,7 @@ fmod MATRIX-ALGEBRA is
     eq shape(transpose(A)) = cols(A) by rows(A) .
     eq shape(inverse(A)) = shape(A) .
     eq shape(A \ B) = cols(A) by cols(B) .
-    ceq shape(alpha A) = shape(A) if alpha =/= 1 .
+    ceq shape(alpha A) = shape(A) if alpha =/= 1.0 .
 
     op valid : MatrixExpr -> Bool .
     eq valid(S) = true . *** all symbols are valid
@@ -83,7 +82,7 @@ fmod MATRIX-ALGEBRA is
     eq valid(transpose(X)) = valid(X) .
     eq valid(inverse(X)) = valid(X) and is_square(X) . 
     eq valid(X \ Y) = rows(X) == rows(Y) and valid(X) and valid(Y) .
-    ceq valid(alpha X) = valid(X) if alpha =/= 1 . 
+    ceq valid(alpha X) = valid(X) if alpha =/= 1.0 . 
 
     *** Catch alls
     eq valid(X) = false [owise] .

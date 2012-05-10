@@ -13,7 +13,7 @@ fmod MATRIX-SIMPLIFY is
     vars X Y : MatrixExpr .
     var S : MatrixSymbol .
     var C : Context .
-    var alpha : Scalar .
+    var alpha : Float .
 
     *** We can treat situtions like MatrixExprs
     op __ : Situation Situation -> Situation .
@@ -29,7 +29,7 @@ fmod MATRIX-SIMPLIFY is
 
     *** Bring scalars out of simplify 
     ceq simplify(alpha X with C) = alpha matrixof(simplify(X with C)) with C 
-                                                        if alpha =/= 1 .
+                                                        if alpha =/= 1.0 .
 
     *** TRANSPOSES
     ceq simplify(X transpose(X) with C) = I with C

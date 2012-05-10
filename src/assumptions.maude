@@ -26,7 +26,7 @@ fmod MATRIX-ASSUMPTIONS is
     var C : Context .
     var D E : NeContext .
     vars X Y : MatrixExpr .
-    var alpha : Scalar .
+    var alpha : Float .
 
     *** IMPLICATION
     op _=>_ : Context Context -> Bool [prec 50] . *** Implies
@@ -39,7 +39,7 @@ fmod MATRIX-ASSUMPTIONS is
     ceq C => D , E = true if C => D and C => E .
     
     *** Scalars don't matter (mostly) 
-    ceq C => alpha X is P = C => X is P        if alpha =/= 1 . 
+    ceq C => alpha X is P = C => X is P        if alpha =/= 1.0 . 
 
     *** SYMMETRIC
     ceq C => X Y is symmetric   = true if C => X is symmetric
@@ -103,6 +103,7 @@ fmod MATRIX-ASSUMPTIONS is
     ceq C => X is lower-triangular = true if C => X is diagonal .
 
     ceq C => transpose(X) is diagonal = true if C => X is diagonal .
+    ceq C => inverse(X)   is diagonal = true if C => X is diagonal .
 
     *** Catch all - ask for direct membership in the context 
     eq C => AP = AP in C .

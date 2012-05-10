@@ -18,17 +18,17 @@ fmod TEST is
     op isRowVector : RowVector -> Bool .
     eq isRowVector(rv) = true .
 
-    ops a b c : -> Scalar .
+    ops a b c : -> Float .
 endfm 
 
 red in TEST : shape(X) == n by m .
 red in TEST : rows(X) == n .
 red in TEST : cols(X) == m .
-red in TEST : shape(X Y) == n by k .
+red in TEST : shape(X Y) == (n by k) .
 red in TEST : (shape(transpose(X))) == (m by n) .
 red in TEST : shape(W \ X) == k by m .
 red in TEST : shape(a X) == shape(X) .
-red in TEST : shape(2 X) == shape(X) .
+red in TEST : shape(2.0 X) == shape(X) .
 
 red in TEST : valid(X Y Z) .
 red in TEST : valid(Y X) == false .
@@ -43,4 +43,4 @@ red in TEST : isVector(transpose(A X)) .
 
 red in TEST : isVector(a transpose(A)) .
 
-red in TEST : 5 3 == 15 .
+red in TEST : 5.0 3.0 == 15.0 .

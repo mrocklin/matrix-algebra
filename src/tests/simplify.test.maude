@@ -22,6 +22,7 @@ red in TEST : matrixof(simplify(transpose(X) with X is symmetric)) == X .
 red in TEST : matrixof(simplify(X transpose(X) with X is orthogonal)) == I .
 red in TEST : matrixof(simplify(transpose(transpose(X)) with no-knowledge)) == X .
 
-red in TEST : matrixof(simplify(2 X with no-knowledge)) == 2 X .
-red in TEST : matrixof(simplify(2 X transpose(X) with X is orthogonal)) == 2 I .
+red in TEST : matrixof(simplify(2.0 X with no-knowledge)) == 2.0 X .
+red in TEST : matrixof(simplify(2.0 X transpose(X) with X is orthogonal)) 
+           == 2.0 I .
 

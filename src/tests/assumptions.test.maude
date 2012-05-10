@@ -7,7 +7,7 @@ fmod TEST is
     eq A = matrix('A , n by n) .
     eq B = matrix('B , n by n) .
 
-    op alpha : -> Scalar .
+    op alpha : -> Float .
 endfm 
 
 red in TEST : X is symmetric , Y is symmetric => X Y is symmetric .
