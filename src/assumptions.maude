@@ -16,14 +16,17 @@ fmod MATRIX-ASSUMPTIONS is
     ops symmetric orthogonal invertible : -> Predicate .
     ops positive-definite singular : -> Predicate .
     ops lower-triangular upper-triangular triangular : -> Predicate .
+    op unit-triangular : -> Predicate .
     ops diagonal tridiagonal : -> Predicate .
 
     op _is_ : MatrixExpr Predicate -> AppliedPredicate [prec 45].
 
+    var P : Predicate .
     var AP : AppliedPredicate . 
     var C : Context .
     var D E : NeContext .
     vars X Y : MatrixExpr .
+    var alpha : Scalar .
 
     *** IMPLICATION
     op _=>_ : Context Context -> Bool [prec 50] . *** Implies
@@ -34,6 +37,9 @@ fmod MATRIX-ASSUMPTIONS is
     eq C => no-knowledge = true .
     ceq C => AP = true if AP in C .
     ceq C => D , E = true if C => D and C => E .
+    
+    *** Scalars don't matter (mostly) 
+    ceq C => alpha X is P = C => X is P        if alpha =/= 1 . 
 
     *** SYMMETRIC
     ceq C => X Y is symmetric   = true if C => X is symmetric

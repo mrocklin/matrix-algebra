@@ -6,6 +6,8 @@ fmod TEST is
     op n : -> Int .
     eq A = matrix('A , n by n) .
     eq B = matrix('B , n by n) .
+
+    op alpha : -> Scalar .
 endfm 
 
 red in TEST : X is symmetric , Y is symmetric => X Y is symmetric .
@@ -24,3 +26,9 @@ red in TEST : A is diagonal => A is triangular .
 
 red in TEST : A is diagonal => A is upper-triangular , A is lower-triangular .
 red in TEST : A is lower-triangular => transpose(A) is upper-triangular .
+
+red in TEST : A is symmetric => alpha A is symmetric .
+red in TEST : A is lower-triangular => alpha A is lower-triangular .
+
+red in TEST : A is lower-triangular , B is lower-triangular 
+           => A B is lower-triangular .
