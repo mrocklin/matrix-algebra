@@ -44,3 +44,6 @@ red in TEST : isVector(transpose(A X)) .
 red in TEST : isVector(a transpose(A)) .
 
 red in TEST : 5.0 3.0 == 15.0 .
+
+red in TEST : I A == A .
+red in TEST : X Y I Z == X Y Z .

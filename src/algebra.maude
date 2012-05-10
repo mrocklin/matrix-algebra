@@ -46,6 +46,8 @@ fmod MATRIX-ALGEBRA is
     eq inverse(A) A = I .
     eq A inverse(A) = I .
     eq I \ X = X .
+    eq I A = A .
+    eq A I = A .
     
     *** SHAPE
     sort Pair . 
