@@ -45,21 +45,21 @@ mod COMPUTE is
     vars A B C D : MatrixExpr .
     vars a b c d e f g : Char .
     vars n m o p q : Nat .
-    vars alpha beta : Scalar .
+    vars alpha beta : Float .
     var Facts : Context .
     var Q : Qid .
 
     op ? : -> Char .
 
     *** SUBROUTINE SGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
-    op GEMM : Char Char Nat Nat Nat Scalar Array Nat Array Nat Scalar Array Nat
+    op GEMM : Char Char Nat Nat Nat Float Array Nat Array Nat Float Array Nat
            -> Array .
     *** SUBROUTINE SSYMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
-    op SYMM : Char Char Nat Nat Scalar Array Nat Array Nat Scalar Array Nat
+    op SYMM : Char Char Nat Nat Float Array Nat Array Nat Float Array Nat
            -> Array .
     
     *** SUBROUTINE STRSM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
-    op TRSM : Char Char Char Char Nat Nat Scalar Array Nat Array Nat 
+    op TRSM : Char Char Char Char Nat Nat Float Array Nat Array Nat 
            -> Array .
 
     op compute : Situation -> Array .
@@ -93,13 +93,13 @@ mod COMPUTE is
     eq T = matrix('T, 10 by 10) . 
     eq R = matrix('R, 10 by 5) . 
     eq S = matrix('S, 10 by 5) .
-    op gamma : -> Scalar . 
+    op gamma : -> Float . 
 endm
 
-search [10, 10] compute(3 T R + 2 S with no-knowledge) =>! A:Array .
+search [10, 10] compute(3.0 T R + 2.0 S with no-knowledge) =>! A:Array .
 search [100, 100] compute(T \ (gamma R)  with T is lower-triangular) 
         =>! A:Array .
-search [10, 10] compute(3 transpose(T) R + 2 S with R is symmetric ) 
+search [10, 10] compute(3.0 transpose(T) R + 2.0 S with R is symmetric ) 
         =>! A:Array .
-***search [100, 100] compute(U transpose(U) V + 3 V + 3 transpose(T) R + 2 S) =>! A:Array .
+***search [100, 100] compute(U transpose(U) V + 3.0 V + 3.0 transpose(T) R + 2.0 S) =>! A:Array .
 
