@@ -13,70 +13,63 @@ mod COMPUTE is
 
     *** sort Statement .
     sort Array .
-    sort Exp
-    sort Arg .
-    subsort String < Arg .
-
     subsort Qid < Array .
 
+    vars A B C D : MatrixExpr .
+    vars X Y Z : Array .
+    var Sym : MatrixSymbol .
+
     *** Some utility functions
-    var X : MatrixExpr .
     op TRANS : MatrixExpr -> Char . 
-    eq TRANS(transpose(X)) = "T" .
-    eq TRANS(X) = "N" [owise] . 
+    eq TRANS(transpose(A)) = "T" .
+    eq TRANS(A) = "N" [owise] . 
 
     op LD : MatrixExpr -> Nat .
-    eq LD(transpose(X)) = rows(X) . 
-    eq LD(X) = rows(X) [owise] .
+    eq LD(transpose(A)) = rows(A) . 
+    eq LD(A) = rows(A) [owise] .
 
     op Side : MatrixExpr MatrixExpr Context -> Char .
     ceq Side(A, B, Facts) = "L" if Facts => A is symmetric .
     ceq Side(A, B, Facts) = "R" if Facts => B is symmetric .
 
     op UPLO : Situation -> Char .
-    ceq UPLO(X with Facts) = "U" if Facts => X is upper-triangular .
-    ceq UPLO(X with Facts) = "L" if Facts => X is lower-triangular .
+    ceq UPLO(A with Facts) = "U" if Facts => A is upper-triangular .
+    ceq UPLO(A with Facts) = "L" if Facts => A is lower-triangular .
 
     op DIAG : Situation -> Char .
-    ceq DIAG(X with Facts) = "U" if Facts => X is unit-triangular .
-    eq DIAG(X with Facts)  = "N" [owise] .
+    ceq DIAG(A with Facts) = "U" if Facts => A is unit-triangular .
+    eq DIAG(A with Facts)  = "N" [owise] .
 
-
-    vars A B C D : MatrixExpr .
-    var MSym : MatrixSymbol .
 
     vars a b c d e f g : Char .
-    vars n m o p q : Nat .
     vars alpha beta : Float .
     var Facts : Context .
-    var Ar, Br : Array .
     var Q : Qid .
     vars transa, transb : Char .
     vars side uplo diag : Char .
     vars m n k lda ldb ldc : Int .
-    vars Ar Br Cr : Array .
 
     op compute : Situation -> Array .
     op valid   : Array -> Bool .
-    eq valid(Sym with Facts) = true .
+    eq valid(compute(Sym with Facts)) = true .
 
     *** SUBROUTINE SGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
     op GEMM : Char Char Nat Nat Nat Float Array Nat Array Nat Float Array Nat
            -> Array .
-    eq valid(GEMM(transa, transb, n, m, k, alpha, Ar, lda, Br, ldb, beta, Cr, ldc))
-     = (valid(Ar) and valid(Br) and valid(Cr)) . 
+    eq valid(GEMM(transa, transb, n, m, k, alpha, X, lda, Y, ldb, beta, Z, ldc))
+     = (valid(X) and valid(Y) and valid(Z)) . 
 
     *** SUBROUTINE SSYMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
     op SYMM : Char Char Nat Nat Float Array Nat Array Nat Float Array Nat
            -> Array .
-    eq valid(SYMM(side, uplo, m, n, alpha, Ar, lda, Br, ldb, beta, Cr, ldc))
-     = (valid(Ar) and valid(Br) and valid(Cr)) . 
+    eq valid(SYMM(side, uplo, m, n, alpha, X, lda, Y, ldb, beta, Z, ldc))
+     = (valid(X) and valid(Y) and valid(Z)) . 
     
     *** SUBROUTINE STRSM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
     op TRSM : Char Char Char Char Nat Nat Float Array Nat Array Nat 
            -> Array .
-    eq valid(TRSM(side, uplo, transa, diag, m, n, alpha, Ar, lda, Br, ldb))
-     = valid(Ar) and valid(Br) .
+    eq valid(TRSM(side, uplo, transa, diag, m, n, alpha, X, lda, Y, ldb))
+     = valid(X) and valid(Y) .
 
 
     *** This should be replaced with something nicer.
@@ -86,10 +79,10 @@ mod COMPUTE is
               => GEMM("N", "N", rows(A), cols(B), cols(A), alpha,
               compute(A with Facts), LD(A), compute(B with Facts), LD(B), beta, 
               compute(C with Facts), LD(C)) .
-    eq GEMM("N", transb, n, m, k, alpha, compute(transpose(A) with Facts), lda, Br, ldb, beta, Cr, ldc)
-     = GEMM("T", transb, n, m, k, alpha, compute(          A  with Facts), lda, Br, ldb, beta, Cr, ldc) .
-    eq GEMM(transa, "N", n, m, k, alpha, Ar, lda, compute(transpose(B) with Facts), ldb, beta, Cr, ldc)
-     = GEMM(transa, "T", n, m, k, alpha, Ar, lda, compute(          B  with Facts), ldb, beta, Cr, ldc) .
+    eq GEMM("N", transb, n, m, k, alpha, compute(transpose(A) with Facts), lda, Y, ldb, beta, Z, ldc)
+     = GEMM("T", transb, n, m, k, alpha, compute(          A  with Facts), lda, Y, ldb, beta, Z, ldc) .
+    eq GEMM(transa, "N", n, m, k, alpha, X, lda, compute(transpose(B) with Facts), ldb, beta, Z, ldc)
+     = GEMM(transa, "T", n, m, k, alpha, X, lda, compute(          B  with Facts), ldb, beta, Z, ldc) .
 
 
     crl [SYMM] : compute(alpha A B + beta C with Facts) 
@@ -106,11 +99,11 @@ mod COMPUTE is
             if
                 A is triangular <= Facts .
 
-    eq TRSM(side, uplo, "N", diag, m, n, alpha, compute(transpose(A) with Facts), lda, Br, ldb)
-     = TRSM(side, uplo, "T", diag, m, n, alpha, compute(          A  with Facts), lda, Br, ldb) .
+    eq TRSM(side, uplo, "N", diag, m, n, alpha, compute(transpose(A) with Facts), lda, Y, ldb)
+     = TRSM(side, uplo, "T", diag, m, n, alpha, compute(          A  with Facts), lda, Y, ldb) .
 
     eq valid(Q) = true .
-    eq valid(Ar) = false [owise].
+    eq valid(X) = false [owise].
     
     ops T R S U V : -> MatrixSymbol .
     eq U = matrix('U, 10 by 10) . 
@@ -122,10 +115,10 @@ mod COMPUTE is
 endm
 
 search [10, 10] compute(3.0 T R + 2.0 S with no-knowledge) 
-        =>! Ar such that valid(Ar) .
+        =>! X such that valid(X) .
 search [100, 100] compute(T \ (gamma R)  with T is lower-triangular) 
-        =>! Ar such that valid(Ar) .
+        =>! X such that valid(X) .
 search [10, 10] compute(3.0 transpose(T) R + 2.0 S with R is symmetric ) 
-        =>! Ar such that valid(Ar) .
+        =>! X such that valid(X) .
 ***search [100, 100] compute(U transpose(U) V + 3.0 V + 3.0 transpose(T) R + 2.0 S) =>! A:Array .
 
