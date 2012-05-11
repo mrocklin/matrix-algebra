@@ -43,34 +43,54 @@ mod COMPUTE is
 
 
     vars A B C D : MatrixExpr .
+    var MSym : MatrixSymbol .
+
     vars a b c d e f g : Char .
     vars n m o p q : Nat .
     vars alpha beta : Float .
     var Facts : Context .
+    var Ar, Br : Array .
     var Q : Qid .
+    vars transa, transb : Char .
+    vars side uplo diag : Char .
+    vars m n k lda ldb ldc : Int .
+    vars Ar Br Cr : Array .
 
-    op ? : -> Char .
+    op compute : Situation -> Array .
+    op valid   : Array -> Bool .
+    eq valid(Sym with Facts) = true .
 
     *** SUBROUTINE SGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
     op GEMM : Char Char Nat Nat Nat Float Array Nat Array Nat Float Array Nat
            -> Array .
+    eq valid(GEMM(transa, transb, n, m, k, alpha, Ar, lda, Br, ldb, beta, Cr, ldc))
+     = (valid(Ar) and valid(Br) and valid(Cr)) . 
+
     *** SUBROUTINE SSYMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
     op SYMM : Char Char Nat Nat Float Array Nat Array Nat Float Array Nat
            -> Array .
+    eq valid(SYMM(side, uplo, m, n, alpha, Ar, lda, Br, ldb, beta, Cr, ldc))
+     = (valid(Ar) and valid(Br) and valid(Cr)) . 
     
     *** SUBROUTINE STRSM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
     op TRSM : Char Char Char Char Nat Nat Float Array Nat Array Nat 
            -> Array .
+    eq valid(TRSM(side, uplo, transa, diag, m, n, alpha, Ar, lda, Br, ldb))
+     = valid(Ar) and valid(Br) .
 
-    op compute : Situation -> Array .
 
     *** This should be replaced with something nicer.
     rl [Symbol] : compute(matrix(Q, n by m) with Facts) => Q .
 
     rl [GEMM] : compute(alpha A B + beta C with Facts) 
-              => GEMM(TRANS(A), TRANS(B), rows(A), cols(B), cols(A), alpha,
+              => GEMM("N", "N", rows(A), cols(B), cols(A), alpha,
               compute(A with Facts), LD(A), compute(B with Facts), LD(B), beta, 
               compute(C with Facts), LD(C)) .
+    eq GEMM("N", transb, n, m, k, alpha, compute(transpose(A) with Facts), lda, Br, ldb, beta, Cr, ldc)
+     = GEMM("T", transb, n, m, k, alpha, compute(          A  with Facts), lda, Br, ldb, beta, Cr, ldc) .
+    eq GEMM(transa, "N", n, m, k, alpha, Ar, lda, compute(transpose(B) with Facts), ldb, beta, Cr, ldc)
+     = GEMM(transa, "T", n, m, k, alpha, Ar, lda, compute(          B  with Facts), ldb, beta, Cr, ldc) .
+
 
     crl [SYMM] : compute(alpha A B + beta C with Facts) 
              => SYMM(Side(A,B,Facts), "U", rows(C), cols(C), alpha, 
@@ -78,7 +98,6 @@ mod COMPUTE is
               compute(C with Facts), LD(C)) 
               if 
                   Facts => A is symmetric or Facts => B is symmetric .
-
     *** This has issues. BLAS over-writes solution onto B. need to make copy
     crl [TRSM] : compute(A \ (alpha B) with Facts) 
             => TRSM("L", UPLO(A with Facts), TRANS(A), DIAG(A with Facts),
@@ -87,6 +106,12 @@ mod COMPUTE is
             if
                 A is triangular <= Facts .
 
+    eq TRSM(side, uplo, "N", diag, m, n, alpha, compute(transpose(A) with Facts), lda, Br, ldb)
+     = TRSM(side, uplo, "T", diag, m, n, alpha, compute(          A  with Facts), lda, Br, ldb) .
+
+    eq valid(Q) = true .
+    eq valid(Ar) = false [owise].
+    
     ops T R S U V : -> MatrixSymbol .
     eq U = matrix('U, 10 by 10) . 
     eq V = matrix('V, 10 by 10) . 
@@ -96,10 +121,11 @@ mod COMPUTE is
     op gamma : -> Float . 
 endm
 
-search [10, 10] compute(3.0 T R + 2.0 S with no-knowledge) =>! A:Array .
+search [10, 10] compute(3.0 T R + 2.0 S with no-knowledge) 
+        =>! Ar such that valid(Ar) .
 search [100, 100] compute(T \ (gamma R)  with T is lower-triangular) 
-        =>! A:Array .
+        =>! Ar such that valid(Ar) .
 search [10, 10] compute(3.0 transpose(T) R + 2.0 S with R is symmetric ) 
-        =>! A:Array .
+        =>! Ar such that valid(Ar) .
 ***search [100, 100] compute(U transpose(U) V + 3.0 V + 3.0 transpose(T) R + 2.0 S) =>! A:Array .
 
