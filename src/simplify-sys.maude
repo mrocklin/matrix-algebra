@@ -9,4 +9,7 @@ mod MATRIX-SIMPLIFY-SYS is
               => simplify(X with C) simplify(Y Z with C) .
     rl [left]  : simplify(X (Y Z) with C) 
               => simplify(X Y with C) simplify(Z with C) .
+
+    *** rl [give-up] : simplify(X with C)
+    ***          =>   X with C .
 endm 
