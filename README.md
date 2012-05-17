@@ -11,7 +11,7 @@ Code
 
 defines an algebra for matrix expressions, i.e.
 
-> `transpose(Y X) Y + A B`
+    transpose(Y X) Y + A B
 
 This language includes multiplies, adds, backsolves, transposes, and inverses
 
@@ -20,13 +20,13 @@ This language includes multiplies, adds, backsolves, transposes, and inverses
 
 defines rules for predicates like
 
-> `X is symmetric , Y is orthogonal`
+    X is symmetric , Y is orthogonal
 
 We group these predicates into contexts (here called Facts) and declares rules
 like the following
 
-> `ceq Facts => X Y is invertible = true if Facts => X is invertible  
->                                       and Facts => Y is invertible .`
+    ceq Facts => X Y is invertible = true if Facts => X is invertible  
+                                         and Facts => Y is invertible .
 
 We include predicates like symmetric, orthogonal, invertible, singular,
 positive-definite, triangular, diagonal, etc.... 
@@ -38,7 +38,8 @@ provide enough examples.
 
 combines these two and includes simplification rules like 
 
-> `ceq simplify(X transpose(X) with Facts) = I with Facts if Facts => X is orthogonal .`
+    ceq simplify(X transpose(X) with Facts) = I with Facts 
+                                  if Facts => X is orthogonal .
 
 Other than a few Maude keywords (like `ceq`) this code is intended to look like
 mathematical statements. This allows for easy extensibility (you can contribute
@@ -50,19 +51,21 @@ paths. I.e. for `X Y Z` there are two ways in which we could group terms
 `(X Y) Z` or `X (Y Z)`. This requires a search mechanism rather than 
 straightforward equational rewriting.
 
-> `rl [right] : simplify(X (Y Z) with C) => simplify(X with C) simplify(Y Z with C) .`
+    rl [right] : simplify(X (Y Z) with C) 
+              => simplify(X with C) simplify(Y Z with C) .`
 
-> `rl [left]  : simplify(X (Y Z) with C) => simplify(X Y with C) simplify(Z with C) .`
+    rl [left]  : simplify(X (Y Z) with C) 
+              => simplify(X Y with C) simplify(Z with C) .
 
 As a result of all of this we can perform simplifications like the following 
 
 Example
 -------
-> `simplify(transpose(Y X) Y + A B with X is symmetric , Y is orthogonal)`
+    simplify(transpose(Y X) Y + A B with X is symmetric , Y is orthogonal)
 
 reduces to
 
-> `X + A B with X is symmetric, Y is orthogonal`
+    X + A B with X is symmetric, Y is orthogonal
 
 Tests
 -----
@@ -72,7 +75,7 @@ the correctness of this code. It is a good place to start.
 
 After you have Maude installed you may run the tests as follows
 
-> `maude src/tests/*.maude`
+    maude src/tests/*.maude
 
 Install
 =======
@@ -83,7 +86,7 @@ You can clone this repository with
 
 You will need the Maude system
 
-[http://maude.cs.uiuc.edu/](http://maude.cs.uiuc.edu/)
+http://maude.cs.uiuc.edu/
 
 Which is available by apt using 
 
