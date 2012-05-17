@@ -84,18 +84,17 @@ You can clone this repository with
 
     $ git clone git://github.com/mrocklin/matrix-algebra.git
 
-You will need the Maude system
-
-http://maude.cs.uiuc.edu/
-
-Which is available by apt using 
+You will need the [Maude system](http://maude.cs.uiuc.edu/) which is available by apt using 
 
     $ sudo apt-get install maude
+
 
 Author
 ======
 
 [Matthew Rocklin](http://matthewrocklin.com/)
+
+This code is under a BSD style license (see LICENSE in this directory.)
 
 Future
 ======
