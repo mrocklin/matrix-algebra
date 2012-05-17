@@ -100,7 +100,7 @@ Future
 There is a file, `compute.maude`, which is the starting point to translate
 matrix expressions into BLAS calls. The goal of this project is to wrap and 
 isolate the complexity of the BLAS and LAPACK libraries so that users can write
-`A x with A is symmetric , v is vector` and have the correct `SYMV` call
+`A x with A is symmetric , x is vector` and have the correct `SYMV` call
 written for them. Additionally, using the search mechanism in Maude it should
 be possible to consider more complex expressions / contexts and select optimal
 computation strategies. This is a work in progress. 
