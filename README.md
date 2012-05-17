@@ -36,13 +36,13 @@ provide enough examples.
 `simplify.maude`
 ----------------
 
-combines these two and includes simplififcation rules like 
+combines these two and includes simplification rules like 
 
 > `ceq simplify(X transpose(X) with Facts) = I with Facts if Facts => X is orthogonal .`
 
-Other than a few maude keywords (like `ceq`) this code is intended to look like
+Other than a few Maude keywords (like `ceq`) this code is intended to look like
 mathematical statements. This allows for easy extensibility (you can contribute
-to this project without knowing maude) and for easy verifiability (the code is 
+to this project without knowing Maude) and for easy verifiability (the code is 
 clear.)
 
 `simplify-sys.maude` contains simplification rules that include branching
@@ -70,7 +70,7 @@ Tests
 The `src/tests` directory contains a number of examples that are used to verify
 the correctness of this code. It is a good place to start. 
 
-After you have maude installed you may run the tests as follows
+After you have Maude installed you may run the tests as follows
 
 > `maude src/tests/*.maude`
 
@@ -93,3 +93,14 @@ Author
 ======
 
 [Matthew Rocklin](http://matthewrocklin.com/)
+
+Future
+======
+
+There is a file, `compute.maude`, which is the starting point to translate
+matrix expressions into BLAS calls. The goal of this project is to wrap and 
+isolate the complexity of the BLAS and LAPACK libraries so that users can write
+`A x with A is symmetric , v is vector` and have the correct `SYMV` call
+written for them. Additionally, using the search mechanism in Maude it should
+be possible to consider more complex expressions / contexts and select optimal
+computation strategies. This is a work in progress. 
