@@ -9,26 +9,34 @@ Code
 `algebra.maude`
 ---------------
 
-`algebra.maude` defines an algebra for matrix expressions, i.e.
+defines an algebra for matrix expressions, i.e.
 
 > `transpose(Y X) Y + A B`
+
+This language includes multiplies, adds, backsolves, transposes, and inverses
 
 `assumptions.maude`
 -------------------
 
-`assumptions.maude` defines rules for predicates like
+defines rules for predicates like
 
 > `X is symmetric , Y is orthogonal`
 
-We group these predicates into contexts and declares rules such as 
+We group these predicates into contexts (here called Facts) and declares rules
+like the following
 
 > `ceq Facts => X Y is invertible = true if Facts => X is invertible  
 >                                       and Facts => Y is invertible .`
 
+We include predicates like symmetric, orthogonal, invertible, singular,
+positive-definite, triangular, diagonal, etc.... 
+If you are interested it is very easy to add more. The existing code should
+provide enough examples.
+
 `simplify.maude`
 ----------------
 
-`simplify.maude` combines these two and includes simplififcation rules like 
+combines these two and includes simplififcation rules like 
 
 > `ceq simplify(X transpose(X) with Facts) = I with Facts if Facts => X is orthogonal .`
 
@@ -50,11 +58,11 @@ As a result of all of this we can perform simplifications like the following
 
 Example
 -------
-> `matrixof(simplify(transpose(Y X) Y + A B with X is symmetric , Y is orthogonal))`
+> `simplify(transpose(Y X) Y + A B with X is symmetric , Y is orthogonal)`
 
 reduces to
 
-> `X + A B`
+> `X + A B with X is symmetric, Y is orthogonal`
 
 Tests
 -----
