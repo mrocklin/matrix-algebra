@@ -3,49 +3,85 @@ Matrix Algebra
 
 An algebra for Matrix Expressions written in Maude. 
 
-The module defines an algebra of matrix expressions i.e.
+Code
+====
 
-transpose(Y X) Y + A B
+`algebra.maude`
+---------------
 
-It also defines a logical framework for known facts about these expressions i.e.
+`algebra.maude` defines an algebra for matrix expressions, i.e.
 
-X is symmetric , Y is orthogonal
+> `transpose(Y X) Y + A B`
 
-With these two modules we can specify simplification rules like
+`assumptions.maude`
+-------------------
 
-M transpose(M) = I if M is orthogonal
+`assumptions.maude` defines rules for predicates like
 
-Which allows us to simplify matrix expressions given known facts. For example
-the expression
+> `X is symmetric , Y is orthogonal`
 
-simplify(transpose(Y X) Y + A B with X is symmetric , Y is orthogonal) 
+We group these predicates into contexts and declares rules such as 
+
+> `ceq Facts => X Y is invertible = true if Facts => X is invertible  
+>                                       and Facts => Y is invertible .`
+
+`simplify.maude`
+----------------
+
+`simplify.maude` combines these two and includes simplififcation rules like 
+
+> `ceq simplify(X transpose(X) with Facts) = I with Facts if Facts => X is orthogonal .`
+
+Other than a few maude keywords (like `ceq`) this code is intended to look like
+mathematical statements. This allows for easy extensibility (you can contribute
+to this project without knowing maude) and for easy verifiability (the code is 
+clear.)
+
+`simplify-sys.maude` contains simplification rules that include branching
+paths. I.e. for `X Y Z` there are two ways in which we could group terms
+`(X Y) Z` or `X (Y Z)`. This requires a search mechanism rather than 
+straightforward equational rewriting.
+
+> `rl [right] : simplify(X (Y Z) with C) => simplify(X with C) simplify(Y Z with C) .`
+
+> `rl [left]  : simplify(X (Y Z) with C) => simplify(X Y with C) simplify(Z with C) .`
+
+As a result of all of this we can perform simplifications like the following 
+
+Example
+-------
+> `matrixof(simplify(transpose(Y X) Y + A B with X is symmetric , Y is orthogonal))`
 
 reduces to
 
-X + A B
+> `X + A B`
 
-This algebra and these rules are written in the Maude System, a language for 
-specifying other small languages that handles computation through rewrite 
-rules. As a result much of the code is intended to read like mathematical
-statements. The expressions above are valid statements.
+Tests
+-----
 
-Disclaimer
-==========
+The `src/tests` directory contains a number of examples that are used to verify
+the correctness of this code. It is a good place to start. 
 
-This is the first project I've done both in this language and in this paradigm.
-Please don't expect much. 
+After you have maude installed you may run the tests as follows
+
+> `maude src/tests/*.maude`
+
+Install
+=======
+
+You can clone this repository with 
+
+    $ git clone git://github.com/mrocklin/matrix-algebra.git
+
+You will need the Maude system
+
+[http://maude.cs.uiuc.edu/](http://maude.cs.uiuc.edu/)
+
+Which is available by apt using 
+
+    $ sudo apt-get install maude
 
 Author
 ======
-Matthew Rocklin
 
-To Run
-======
-
-Install the maude system. This can be done on debian/ubuntu systems using
-
-apt-get install maude
-
-Run the tests using 
-
-maude src/tests/*.maude
+[Matthew Rocklin](http://matthewrocklin.com/)
