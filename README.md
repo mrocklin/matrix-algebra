@@ -1,7 +1,7 @@
 Matrix Algebra
 ==============
 
-An algebra for Matrix Expressions written in Maude. 
+A small language for Matrix Expressions written in Maude. 
 
 Code
 ====
@@ -22,7 +22,7 @@ defines rules for predicates like
 
     X is symmetric , Y is orthogonal
 
-We group these predicates into contexts (here called Facts) and declares rules
+We group these predicates into contexts (here called Facts) and declare rules
 like the following
 
     ceq Facts => X Y is invertible = true if Facts => X is invertible  
