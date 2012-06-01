@@ -13,6 +13,7 @@ fmod MATRIX-SIMPLIFY is
     vars X Y : MatrixExpr .
     var S : MatrixSymbol .
     var C : Context .
+    var P : Predicate .
     var alpha : Float .
 
     *** We can treat situtions like MatrixExprs
@@ -40,6 +41,9 @@ fmod MATRIX-SIMPLIFY is
     *** INVERSES
     ceq simplify(inverse(X) with C) = simplify(transpose(X) with C)
                                 if C => X is orthogonal .
+
+    *** Remove inactive predicates
+    ceq X with (Y is P , C) = X with C    if (Y in X) == false .
 
     *** Catch Alls, reduce simplify to sub-terms
     *** TODO these are currently ambiguous

@@ -26,3 +26,5 @@ red in TEST : matrixof(simplify(2.0 X with no-knowledge)) == 2.0 X .
 red in TEST : matrixof(simplify(2.0 X transpose(X) with X is orthogonal)) 
            == 2.0 I .
 
+red in TEST : simplify(X transpose(X) with X is orthogonal) == simplify(I with
+no-knowledge) .

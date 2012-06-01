@@ -47,3 +47,6 @@ red in TEST : 5.0 3.0 == 15.0 .
 
 red in TEST : I A == A .
 red in TEST : X Y I Z == X Y Z .
+
+red in TEST : X in W + Y \ inverse(transpose(X)) .
+red in TEST : X in W + Y Y \ Z == false .

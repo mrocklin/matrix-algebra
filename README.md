@@ -65,7 +65,7 @@ Example
 
 reduces to
 
-    X + A B with X is symmetric, Y is orthogonal
+    X + A B with X is symmetric
 
 Tests
 -----

@@ -30,6 +30,7 @@ fmod MATRIX-ALGEBRA is
     op _\_ : MatrixExpr MatrixExpr -> MatrixExpr [ctor assoc prec 25] .
 
     op transpose : MatrixExpr -> MatrixExpr [ctor] .
+    
     op inverse : MatrixExpr -> MatrixExpr [ctor] .
 
     eq A (B + C) = (A B) + (A C) [metadata "Distributive Law"] . 
@@ -85,4 +86,14 @@ fmod MATRIX-ALGEBRA is
 
     *** Catch alls
     eq valid(X) = false [owise] .
+
+    op _in_ : MatrixExpr MatrixExpr -> Bool [prec 33] .
+    eq A in A = true .
+    eq A in B C = A in B or A in C .
+    ceq A in alpha B = A in B if alpha =/= 1.0 .
+    eq A in B + C = A in B or A in C .
+    eq A in transpose(B) = A in B .
+    eq A in B \ C = A in B or A in C .
+    eq A in inverse(B) = A in B .
+    eq A in B = false [owise] .
 endfm
