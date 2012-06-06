@@ -1,0 +1,50 @@
+load simplify.maude
+
+fmod COMPUTE is 
+    protecting MATRIX-SIMPLIFY .
+    protecting STRING .
+    protecting FLOAT .
+
+    sorts Function Statement Assignment .
+    subsort Function < Statement .
+    subsort Assignment < Statement .
+    op _=_ : String String -> Assignment .
+    op _=_ : String Function -> Assignment .
+    op _=_ : String MatrixSymbol -> Assignment .
+    op copy : String -> String .
+
+    sort Statements .
+    subsort Statement < Statements .
+    op _;_ : Statements Statements -> Statements [ctor assoc prec 100] .
+
+    sorts Computation Computations .
+    subsort Computation < Computations .
+    op __ : Computations Computations -> Computations [ctor assoc id: no-work  prec 100] .
+    op do_where_ : Statements Computations -> Computation .
+    op no-work : -> Computations .
+
+    *** A computation to compute MatrixExpr and store it in Var 
+    op compute : String MatrixExpr -> Computation .
+
+    vars X Y Z : MatrixExpr .
+    var S : MatrixSymbol .
+    vars alpha beta : Float .
+    var Facts : Context .
+    var v : String .
+    op GEMM : Float String String Float String -> Function .
+    eq compute(v, alpha X Y + beta Z) = 
+    do
+        v = copy(v + "3") ; GEMM(alpha, v + "1", v + "2", beta, v)
+    where 
+        compute(v + "1", X)
+        compute(v + "2", Y)
+        compute(v + "3", Z) .
+
+    eq compute(v, S) = do v = S where no-work .
+
+    ops A B C : -> MatrixSymbol .
+    ops a b : -> Float .
+endfm
+
+red in COMPUTE : compute("v", a A B + b C) .
+
