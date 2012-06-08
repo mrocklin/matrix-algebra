@@ -1,0 +1,9 @@
+load ../trsm.maude
+
+fmod TRSM-TEST is 
+    protecting COMPUTE-TRSM .
+    protecting COMPUTE-TEST .
+endfm
+
+red in TRSM-TEST : compute(v, X \ a Y with X is lower-triangular) .
+---red in TEST : compute(v, X \ a (Z Y + X) with X is lower-triangular) .

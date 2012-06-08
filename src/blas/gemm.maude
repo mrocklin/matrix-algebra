@@ -1,0 +1,26 @@
+load ../compute-graph.maude
+
+fmod COMPUTE-GEMM is 
+    protecting COMPUTE .
+
+    vars X Y Z : MatrixExpr .
+    var A B C : Array .
+    var S : MatrixSymbol .
+    vars alpha beta : Float .
+    var Facts : Context .
+    var v : Variable .
+
+    op GEMM : Char Char Nat Nat Nat Float Array Nat Array Nat Float Array Nat
+           -> Array .
+    eq compute(v, alpha X Y + beta Z with Facts) 
+        =  
+        do (
+            v = copy(Cr) ;
+            GEMM(TRANS(X), TRANS(Y), rows(X), cols(Y), cols(X), alpha, Ar, LD(X), Br, LD(Y), beta, v, LD(Z)))
+        where (
+            compute(Ar, remove-transpose(X) with Facts) ,
+            compute(Br, remove-transpose(Y) with Facts) ,
+            compute(Cr, Z with Facts) ) .
+
+endfm
+

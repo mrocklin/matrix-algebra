@@ -1,0 +1,10 @@
+load ../gemm.maude
+
+fmod GEMM-TEST is 
+    protecting COMPUTE-GEMM .
+    protecting COMPUTE-TEST .
+endfm
+
+red in GEMM-TEST : compute(v, a X Y + b Z with no-knowledge) .
+red in GEMM-TEST : compute(v, a transpose(X) Y + b Z with no-knowledge) .
+red in GEMM-TEST : compute(v, a X transpose(Y) + b Z with no-knowledge) .
