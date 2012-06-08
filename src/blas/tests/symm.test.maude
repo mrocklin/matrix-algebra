@@ -1,0 +1,9 @@
+load ../symm.maude
+
+fmod SYMM-TEST is 
+    protecting COMPUTE-SYMM .
+    protecting COMPUTE-TEST .
+endfm
+
+red in SYMM-TEST : compute(v, a X Y + b Z with X is symmetric) .
+red in SYMM-TEST : compute(v, a X Y + b Z with Y is symmetric) .
