@@ -3,14 +3,14 @@ load ../symm.maude
 load ../trsm.maude
 load ../../compute-graph.maude
 
-fmod INTEGRATION-TEST is 
+mod INTEGRATION-TEST is 
     protecting COMPUTE-GEMM .
     protecting COMPUTE-SYMM .
     protecting COMPUTE-TRSM .
     protecting COMPUTE-TEST .
-endfm
+    var comp : Computation .
+endm
 
-red in INTEGRATION-TEST : compute(v, X \ a (Z Y + X) 
-        with X is lower-triangular) .
-red in INTEGRATION-TEST : compute(v, X \ a (Z Y + X) 
-        with X is lower-triangular , Y is symmetric ) .
+search [10, 10] in INTEGRATION-TEST : 
+        compute(v, X \ a (Z Y + X) with X is lower-triangular , Y is symmetric)
+        =>! comp such that valid(comp) .

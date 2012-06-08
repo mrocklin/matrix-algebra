@@ -1,6 +1,6 @@
 load ../compute-graph.maude
 
-fmod COMPUTE-TRSM is 
+mod COMPUTE-TRSM is 
     protecting COMPUTE .
 
     vars X Y Z : MatrixExpr .
@@ -12,14 +12,18 @@ fmod COMPUTE-TRSM is
 
     op TRSM : Char Char Char Char Nat Nat Float Array Nat Array Nat 
            -> Array .
-    ceq compute(v, X \ (alpha Y) with Facts) 
-        =
+    crl [TRSM] : compute(v, X \ (alpha Y) with Facts) 
+        =>
         do
+        {
            v = copy(Br) ;
            TRSM("L", UPLO(X with Facts), TRANS(X), DIAG(X with Facts), rows(X), cols(Y), alpha, Ar, LD(X), v, LD(Y))
+        }
         where
-           compute(Ar, X with Facts) ,
+        {
+           compute(Ar, remove-transpose(X) with Facts) ,
            compute(Br, Y with Facts)
+        }
         if X is triangular <= Facts .
 
-endfm
+endm

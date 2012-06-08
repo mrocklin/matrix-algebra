@@ -1,8 +1,20 @@
 load ../trsm.maude
 
-fmod TRSM-TEST is 
+mod TRSM-TEST is 
     protecting COMPUTE-TRSM .
     protecting COMPUTE-TEST .
-endfm
+    var comp : Computation .
+    var b : Bool .
+endm
 
-red in TRSM-TEST : compute(v, X \ a Y with X is lower-triangular) .
+search [10, 10] in TRSM-TEST : compute(v, X \ (a Y) with X is lower-triangular)
+        =>! comp such that valid(comp) .
+
+search [10, 10] in TRSM-TEST : compute(v, transpose(X) \ a Y 
+            with X is lower-triangular)
+            =>! comp such that valid(comp).
+search [10, 10] in TRSM-TEST : compute(v, transpose(X) \ a Y 
+            with X is upper-triangular)
+            =>! comp such that valid(comp) .
+search [10, 10] in TRSM-TEST : compute(v, X \ a Y with X is unit-triangular)
+        =>! comp such that valid(comp) .

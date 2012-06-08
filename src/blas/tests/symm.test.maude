@@ -1,9 +1,14 @@
 load ../symm.maude
 
-fmod SYMM-TEST is 
+mod SYMM-TEST is 
     protecting COMPUTE-SYMM .
     protecting COMPUTE-TEST .
-endfm
+    var comp : Computation .
+endm
 
-red in SYMM-TEST : compute(v, a X Y + b Z with X is symmetric) .
-red in SYMM-TEST : compute(v, a X Y + b Z with Y is symmetric) .
+search [10, 10] in SYMM-TEST : compute(v, a X Y + b Z with X is symmetric)
+        =>! comp such that valid(comp) .
+search [10, 10] in SYMM-TEST : compute(v, a X Y + b Z with Y is symmetric)
+        =>! comp such that valid(comp) .
+search [10, 10] in SYMM-TEST : compute(v, a X Y + b Z with no-knowledge)
+        =>! comp such that valid(comp) .

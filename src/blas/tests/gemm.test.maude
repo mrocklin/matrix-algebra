@@ -1,10 +1,11 @@
 load ../gemm.maude
 
-fmod GEMM-TEST is 
+mod GEMM-TEST is 
     protecting COMPUTE-GEMM .
     protecting COMPUTE-TEST .
-endfm
+    var comp : Computation .
+    var b : Bool .
+endm
 
-red in GEMM-TEST : compute(v, a X Y + b Z with no-knowledge) .
-red in GEMM-TEST : compute(v, a transpose(X) Y + b Z with no-knowledge) .
-red in GEMM-TEST : compute(v, a X transpose(Y) + b Z with no-knowledge) .
+search [10, 10] in GEMM-TEST : compute(v, X Y + Z with no-knowledge)
+        =>! comp such that valid(comp).

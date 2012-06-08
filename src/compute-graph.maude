@@ -1,36 +1,39 @@
 load simplify.maude
+load computations.maude 
 
 fmod COMPUTE is 
     protecting MATRIX-SIMPLIFY .
     protecting STRING .
     protecting FLOAT .
+    ---protecting SET{Computation} * (sort NeSet{Computation} to NeComputations,  
+---                                   sort   Set{Computation} to Computations) .  
+
+    sorts Computation Computations .
+    subsort Computation < Computations .
+    op _,_ : Computations Computations -> Computations [ctor comm assoc prec 70 id: empty ] .
+    op empty : -> Computations . 
 
     sorts Array Statement Assignment Variable Expression .
-    subsort Array MatrixSymbol < Variable .
+    subsort Array < Variable .
     subsort Variable < Expression .
-    subsort Expression Assignment < Statement .
+    subsorts Expression Assignment < Statement .
+    op load : MatrixSymbol -> Array .
 
     op _=_ : Variable Expression -> Assignment .
     op copy : Variable -> Variable .
 
     sort Statements .
     subsort Statement < Statements .
-    op _;_ : Statements Statements -> Statements [ctor assoc prec 100] .
+    op _;_ : Statements Statements -> Statements [ctor assoc prec 70 ] .
 
-    sorts Computation Computations .
-    subsort Computation < Computations .
-    op _,_ : Computations Computations -> Computations [ctor comm assoc  prec 120   ] .
-
-    op do_where_ : Statements Computations -> Computation [ctor prec 125] .
-    op do_ : Statements -> Computation [ctor prec 126] .
+    op do{_}where{_} : Statements Computations -> Computation [ctor prec 75] .
+    op do_ : Statements -> Computation [ctor prec 76] .
 
     *** A computation to compute MatrixExpr and store it in Variable
     op compute : Variable Situation -> Computation .
 
     vars X Y Z : MatrixExpr .
-    var A B C : Array .
     var S : MatrixSymbol .
-    vars alpha beta : Float .
     var Facts : Context .
     var v : Variable .
 
@@ -58,11 +61,22 @@ fmod COMPUTE is
     op LD : MatrixExpr -> Nat .
     eq LD(transpose(X)) = rows(X) . 
     eq LD(X) = rows(X) [owise] .
-
+    
     *** Need to find a better way to generate variables
     ops Ar Br Cr Dr : -> Array .
 
-    eq compute(v, S with Facts ) = do v = S .
+    eq compute(v, S with Facts ) = do v = load(S) .
+
+    var comp : [Computation] .
+    var computations : [Computations] .
+    var statements : Statements .
+    op allvalid : [Computations] -> Bool .
+    op valid : [Computation] -> Bool .
+    eq allvalid(empty) = true .
+    eq valid(do{statements}where{computations}) = allvalid(computations) .
+    eq allvalid(comp, computations) = valid(comp) and allvalid(computations) . 
+    eq valid(do v = load(S)) = true .
+
 endfm
 
 fmod COMPUTE-TEST is 
@@ -72,7 +86,11 @@ fmod COMPUTE-TEST is
     eq X = matrix('X, 5 by 5) . 
     eq Y = matrix('Y, 5 by 5) .
     eq Z = matrix('Z, 5 by 5) .
-    op v : -> Variable . 
+    op v : -> Array . 
     ops a b : -> Float .
 
 endfm
+
+---red in COMPUTE-TEST : valid(compute(v, X with no-knowledge)) .
+---red in COMPUTE-TEST : valid(compute(v, transpose(X) with no-knowledge)) .
+---red in COMPUTE-TEST : allvalid(compute(v, X with no-knowledge) , compute(v, transpose(X) with no-knowledge)) .

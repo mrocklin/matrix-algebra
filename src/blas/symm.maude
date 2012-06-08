@@ -1,10 +1,9 @@
 load ../compute-graph.maude
 
-fmod COMPUTE-SYMM is 
+mod COMPUTE-SYMM is 
     protecting COMPUTE .
 
     vars X Y Z : MatrixExpr .
-    var A B C : Array .
     var S : MatrixSymbol .
     vars alpha beta : Float .
     var Facts : Context .
@@ -12,17 +11,20 @@ fmod COMPUTE-SYMM is
 
     op SYMM : Char Char Nat Nat Float Array Nat Array Nat Float Array Nat
            -> Array .
-    ceq  compute(v, alpha X Y + beta Z with Facts) 
-        =
-        do
+    crl [SYMM] :  compute(v, alpha X Y + beta Z with Facts) 
+        => 
+        do{
             v = copy(Cr) ;
             SYMM(Side(X,Y,Facts), "U", rows(Z), cols(Z), alpha, Ar, LD(X), Br, LD(Y), beta, v, LD(Z))
-        where
+        }
+        where 
+        {
             compute(Ar, X with Facts) , 
             compute(Br, Y with Facts) , 
             compute(Cr, Z with Facts) 
+        }
         if 
             Facts => X is symmetric or Facts => Y is symmetric .
 
-endfm
+endm
 
