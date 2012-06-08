@@ -6,4 +6,3 @@ fmod TRSM-TEST is
 endfm
 
 red in TRSM-TEST : compute(v, X \ a Y with X is lower-triangular) .
----red in TEST : compute(v, X \ a (Z Y + X) with X is lower-triangular) .
