@@ -5,13 +5,13 @@ fmod COMPUTE is
     protecting STRING .
     protecting FLOAT .
 
-    sorts Function Expression Statement Assignment .
-    subsort Function < Expression < Statement .
-    subsort MatrixSymbol < Expression .
-    subsort Assignment < Statement .
-    op _=_ : String String -> Assignment .
-    op _=_ : String Expression -> Assignment .
-    op copy : String -> String .
+    sorts Array Statement Assignment Variable Expression .
+    subsort Array MatrixSymbol < Variable .
+    subsort Variable < Expression .
+    subsort Expression Assignment < Statement .
+
+    op _=_ : Variable Expression -> Assignment .
+    op copy : Variable -> Variable .
 
     sort Statements .
     subsort Statement < Statements .
@@ -24,39 +24,46 @@ fmod COMPUTE is
     op do_; : Statements -> Computation .
     op no-work : -> Computations .
 
-    *** A computation to compute MatrixExpr and store it in Var 
-    op compute : String MatrixExpr -> Computation .
+    *** A computation to compute MatrixExpr and store it in Variable
+    op compute : Variable MatrixExpr -> Computation .
 
     vars X Y Z : MatrixExpr .
     var S : MatrixSymbol .
     vars alpha beta : Float .
     var Facts : Context .
-    var v : String .
+    var v : Variable .
 
-    op GEMM : Float String String Float String -> Function .
+    ops A B C D : -> Array .
+    op GEMM : Float Array Array Float Array -> Statement .
     eq compute(v, alpha X Y + beta Z) = 
     do
-        v = copy(v + "3") ; GEMM(alpha, v + "1", v + "2", beta, v)
+        v = copy(C) ; GEMM(alpha, A, B, beta, v)
     where 
-        compute(v + "1", X)
-        compute(v + "2", Y)
-        compute(v + "3", Z) .
+        compute(A, X)
+        compute(B, Y)
+        compute(C, Z) .
 
-    op TRSM : String Float String -> Function .
+    op TRSM : Array Float Array -> Statement .
     eq compute(v, X \ alpha Y) = 
     do 
-        v = TRSM(v + "1", alpha, v + "2")
+        v = copy(B) ; TRSM(A, alpha, B)
     where
-        compute(v + "1" , X)
-        compute(v + "2" , Y) .
+        compute(A , X)
+        compute(B , Y) .
     
     eq compute(v, S) = do v = S ; .
-
-    ops A B C : -> MatrixSymbol .
-    ops a b : -> Float .
 endfm
 
-red in COMPUTE : compute("v", a A B + b C) .
-red in COMPUTE : compute("v", A \ a B) .
-red in COMPUTE : compute("v", A \ a (C B + A)) .
+fmod TEST is 
+    protecting COMPUTE .
+
+    ops X Y Z : -> MatrixSymbol .
+    op v : -> Variable . 
+    ops a b : -> Float .
+
+endfm
+
+red in TEST : compute(v, a X Y + b Z) .
+red in TEST : compute(v, X \ a Y) .
+red in TEST : compute(v, X \ a (Z Y + X)) .
 
