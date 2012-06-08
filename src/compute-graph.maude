@@ -19,51 +19,124 @@ fmod COMPUTE is
 
     sorts Computation Computations .
     subsort Computation < Computations .
-    op __ : Computations Computations -> Computations [ctor assoc id: no-work  prec 100] .
-    op do_where_ : Statements Computations -> Computation .
-    op do_; : Statements -> Computation .
-    op no-work : -> Computations .
+    op _,_ : Computations Computations -> Computations [ctor comm assoc  prec 120   ] .
+
+    op do_where_ : Statements Computations -> Computation [ctor prec 125] .
+    op do_ : Statements -> Computation [ctor prec 126] .
 
     *** A computation to compute MatrixExpr and store it in Variable
-    op compute : Variable MatrixExpr -> Computation .
+    op compute : Variable Situation -> Computation .
 
     vars X Y Z : MatrixExpr .
+    var A B C : Array .
     var S : MatrixSymbol .
     vars alpha beta : Float .
     var Facts : Context .
     var v : Variable .
 
-    ops A B C D : -> Array .
-    op GEMM : Float Array Array Float Array -> Statement .
-    eq compute(v, alpha X Y + beta Z) = 
-    do
-        v = copy(C) ; GEMM(alpha, A, B, beta, v)
-    where 
-        compute(A, X)
-        compute(B, Y)
-        compute(C, Z) .
-
-    op TRSM : Array Float Array -> Statement .
-    eq compute(v, X \ alpha Y) = 
-    do 
-        v = copy(B) ; TRSM(A, alpha, B)
-    where
-        compute(A , X)
-        compute(B , Y) .
+    *** Some utility functions
+    op TRANS : MatrixExpr -> Char . 
+    eq TRANS(transpose(X)) = "T" .
+    eq TRANS(X) = "N" [owise] . 
     
-    eq compute(v, S) = do v = S ; .
+    op Side : MatrixExpr MatrixExpr Context -> Char .
+    ceq Side(X, Y, Facts) = "L" if Facts => X is symmetric .
+    ceq Side(X, Y, Facts) = "R" if Facts => Y is symmetric .
+
+    op UPLO : Situation -> Char .
+    ceq UPLO(X with Facts) = "U" if Facts => X is upper-triangular .
+    ceq UPLO(X with Facts) = "L" if Facts => X is lower-triangular .
+
+    op DIAG : Situation -> Char .
+    ceq DIAG(X with Facts) = "U" if Facts => X is unit-triangular .
+    eq DIAG(X with Facts)  = "N" [owise] .
+
+    op LD : MatrixExpr -> Nat .
+    eq LD(transpose(X)) = rows(X) . 
+    eq LD(X) = rows(X) [owise] .
+
+    vars a b c d e f g : Char .
+    var Q : Qid .
+    vars transa, transb : Char .
+    vars side uplo diag : Char .
+    vars m n k lda ldb ldc : Nat .
+
+    *** Need to find a better way to generate variables
+    ops Ar Br Cr Dr : -> Array .
+
+
+    var other-computations : Computations .
+
+    var c1 : Computation .
+    vars s1 s2 : Statements .
+
+    eq (do s1 where computations) = do s1 .
+
+    op GEMM : Char Char Nat Nat Nat Float Array Nat Array Nat Float Array Nat
+           -> Array .
+    eq compute(v, alpha X Y + beta Z with Facts) 
+        =  
+        do
+            v = copy(Cr) ;
+            GEMM("N", "N", rows(X), cols(Y), cols(X), alpha, Ar, LD(X), Br, LD(Y), beta, v, LD(Z))
+        where
+            compute(Ar, X with Facts) ,
+            compute(Br, Y with Facts) ,
+            compute(Cr, Z with Facts) .
+
+    eq  do 
+            s1 ; GEMM("N", transb, n, m, k, alpha, A, lda, B, ldb, beta, C, ldc) ; s2
+        where 
+            compute(A, transpose(X) with Facts) ,
+            computations
+     =  do 
+            s1 ; GEMM("T", transb, n, m, k, alpha, A, lda, B, ldb, beta, C, ldc) ; s2
+        where 
+            compute(A,           X  with Facts) ,
+            computations .
+
+    eq  do 
+            s1 ; GEMM(transa, "N", n, m, k, alpha, A, lda, B, ldb, beta, C, ldc) ; s2
+        where 
+            compute(B, transpose(Y) with Facts) , 
+            other-computations
+     =  do 
+            s1 ; GEMM(transa, "T", n, m, k, alpha, A, lda, B, ldb, beta, C, ldc) ; s2
+        where 
+            compute(B,           Y  with Facts) , 
+            other-computations .
+
+                
+    op TRSM : Char Char Char Char Nat Nat Float Array Nat Array Nat 
+           -> Array .
+    ceq compute(v, X \ (alpha Y) with Facts) 
+        =
+        do
+           v = copy(Br) ;
+           TRSM("L", UPLO(X with Facts), TRANS(X), DIAG(X with Facts), rows(X), cols(Y), alpha, Ar, LD(X), v, LD(Y))
+        where
+           compute(Ar, X with Facts) ,
+           compute(Br, Y with Facts)
+        if X is triangular <= Facts .
+
+    eq compute(v, S with Facts ) = do v = S .
 endfm
 
 fmod TEST is 
     protecting COMPUTE .
 
     ops X Y Z : -> MatrixSymbol .
+    eq X = matrix('X, 5 by 5) . 
+    eq Y = matrix('Y, 5 by 5) .
+    eq Z = matrix('Z, 5 by 5) .
     op v : -> Variable . 
     ops a b : -> Float .
 
 endfm
 
-red in TEST : compute(v, a X Y + b Z) .
-red in TEST : compute(v, X \ a Y) .
-red in TEST : compute(v, X \ a (Z Y + X)) .
+--- red in TEST : compute(v, a X Y + b Z with no-knowledge) .
+red in TEST : compute(v, a transpose(X) Y + b Z with no-knowledge) .
+---red in TEST : compute(v, a X transpose(Y) + b Z with no-knowledge) .
+---red in TEST : compute(v, X \ a Y with X is lower-triangular) .
+---red in TEST : compute(v, X \ a (Z Y + X) with X is lower-triangular) .
 
