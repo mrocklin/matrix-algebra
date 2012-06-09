@@ -1,7 +1,7 @@
 load ../gemm.maude
 
 mod GEMM-TEST is 
-    protecting COMPUTE-GEMM .
+    protecting GEMM .
     protecting COMPUTE-TEST .
     var comp : Computation .
     var b : Bool .

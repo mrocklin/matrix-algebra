@@ -1,7 +1,7 @@
 load ../symm.maude
 
 mod SYMM-TEST is 
-    protecting COMPUTE-SYMM .
+    protecting SYMM .
     protecting COMPUTE-TEST .
     var comp : Computation .
 endm

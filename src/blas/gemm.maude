@@ -1,6 +1,6 @@
 load ../compute-graph.maude
 
-mod COMPUTE-GEMM is 
+mod GEMM is 
     protecting COMPUTE .
 
     vars X Y Z : MatrixExpr .

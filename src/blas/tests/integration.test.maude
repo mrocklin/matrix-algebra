@@ -4,9 +4,9 @@ load ../trsm.maude
 load ../../compute-graph.maude
 
 mod INTEGRATION-TEST is 
-    protecting COMPUTE-GEMM .
-    protecting COMPUTE-SYMM .
-    protecting COMPUTE-TRSM .
+    protecting GEMM .
+    protecting SYMM .
+    protecting TRSM .
     protecting COMPUTE-TEST .
     var comp : Computation .
 endm

@@ -1,6 +1,6 @@
 load ../compute-graph.maude
 
-mod COMPUTE-TRSM is 
+mod TRSM is 
     protecting COMPUTE .
 
     vars X Y Z : MatrixExpr .

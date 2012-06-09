@@ -1,6 +1,6 @@
 load ../compute-graph.maude
 
-mod COMPUTE-SYMM is 
+mod SYMM is 
     protecting COMPUTE .
 
     vars X Y Z : MatrixExpr .

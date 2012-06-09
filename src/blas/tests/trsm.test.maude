@@ -1,7 +1,7 @@
 load ../trsm.maude
 
 mod TRSM-TEST is 
-    protecting COMPUTE-TRSM .
+    protecting TRSM .
     protecting COMPUTE-TEST .
     var comp : Computation .
     var b : Bool .
