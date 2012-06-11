@@ -1,0 +1,10 @@
+load ../gesv.maude
+
+mod GESV-TEST is 
+    protecting GESV .
+    protecting COMPUTE-TEST .
+    var comp : Computation .
+endm
+
+search [10, 10] in GESV-TEST : compute(v, X \ Y with no-knowledge)
+        =>! comp such that valid(comp) .

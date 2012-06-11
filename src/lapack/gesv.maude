@@ -1,0 +1,29 @@
+load ../compute-graph.maude
+
+mod GESV is 
+    protecting COMPUTE .
+
+    vars X Y Z : MatrixExpr .
+    var A B C v : Array .
+    var S : MatrixSymbol .
+    vars alpha beta : Float .
+    var Facts : Context .
+
+    op IPIV : -> Array .
+    op INFO : -> Int .
+    --- SUBROUTINE SGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+    op GESV : Nat Nat Array Nat Array Array Nat Int  
+           -> Statement .
+
+    rl [GESV] : compute(v, X \ Y with Facts) 
+    => do {
+            v = copy(Br) ;
+            GESV(rows(X), cols(Y), Ar, LD(X), IPIV, v, LD(Y), INFO)
+        }
+        where 
+        {
+            compute(Ar, X with Facts) ,
+            compute(Br, Y with Facts)
+        }.
+
+endm
