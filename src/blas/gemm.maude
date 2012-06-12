@@ -4,8 +4,7 @@ mod GEMM is
     protecting COMPUTE .
 
     vars X Y Z : MatrixExpr .
-    var A B C v : Array .
-    var S : MatrixSymbol .
+    var v : Array .
     vars alpha beta : Float .
     var Facts : Context .
 

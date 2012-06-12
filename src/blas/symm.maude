@@ -4,7 +4,6 @@ mod SYMM is
     protecting COMPUTE .
 
     vars X Y Z : MatrixExpr .
-    var S : MatrixSymbol .
     vars alpha beta : Float .
     var Facts : Context .
     var v : Variable .

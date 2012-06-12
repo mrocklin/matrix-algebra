@@ -3,9 +3,7 @@ load ../compute-graph.maude
 mod TRSM is 
     protecting COMPUTE .
 
-    vars X Y Z : MatrixExpr .
-    var A B C : Array .
-    var S : MatrixSymbol .
+    vars X Y : MatrixExpr .
     vars alpha beta : Float .
     var Facts : Context .
     var v : Variable .

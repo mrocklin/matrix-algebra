@@ -5,8 +5,6 @@ fmod COMPUTE is
     protecting MATRIX-SIMPLIFY .
     protecting STRING .
     protecting FLOAT .
-    ---protecting SET{Computation} * (sort NeSet{Computation} to NeComputations,  
----                                   sort   Set{Computation} to Computations) .  
 
     sorts Computation Computations .
     subsort Computation < Computations .
@@ -65,13 +63,13 @@ fmod COMPUTE is
     *** Need to find a better way to generate variables
     ops Ar Br Cr Dr : -> Array .
 
-    eq compute(v, S with Facts ) = do v = load(S) .
+    eq compute(v, S with Facts ) = (do v = load(S)) .
 
-    var comp : [Computation] .
-    var computations : [Computations] .
+    var comp : Computation .
+    var computations : Computations .
     var statements : Statements .
-    op allvalid : [Computations] -> Bool .
-    op valid : [Computation] -> Bool .
+    op allvalid : Computations -> Bool .
+    op valid : Computation -> Bool .
     eq allvalid(empty) = true .
     eq valid(do{statements}where{computations}) = allvalid(computations) .
     eq allvalid(comp, computations) = valid(comp) and allvalid(computations) . 

@@ -3,9 +3,8 @@ load ../compute-graph.maude
 mod GESV is 
     protecting COMPUTE .
 
-    vars X Y Z : MatrixExpr .
-    var A B C v : Array .
-    var S : MatrixSymbol .
+    vars X Y : MatrixExpr .
+    var v : Array .
     vars alpha beta : Float .
     var Facts : Context .
 
