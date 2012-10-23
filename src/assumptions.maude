@@ -21,11 +21,11 @@ fmod MATRIX-ASSUMPTIONS is
 
     op _is_ : MatrixExpr Predicate -> AppliedPredicate [prec 45].
 
-    var P : Predicate .
-    var AP : AppliedPredicate . 
-    var C : Context .
-    var D E : NeContext .
-    vars X Y : MatrixExpr .
+    var P     : Predicate .
+    var AP    : AppliedPredicate . 
+    var C     : Context .
+    var D E   : NeContext .
+    vars X Y  : MatrixExpr .
     var alpha : Float .
 
     *** IMPLICATION
@@ -34,7 +34,7 @@ fmod MATRIX-ASSUMPTIONS is
     op _in_ : AppliedPredicate Context -> Bool [prec 50] .
     eq AP <= C = C => AP .
 
-    eq C => no-knowledge = true .
+    eq  C => no-knowledge = true .
     ceq C => AP = true if AP in C .
     ceq C => D , E = true if C => D and C => E .
     
@@ -46,16 +46,16 @@ fmod MATRIX-ASSUMPTIONS is
                                       and C => Y is symmetric .
     ceq C => X + Y is symmetric = true if C => X is symmetric 
                                       and C => Y is symmetric .
-    ceq C => transpose(X) is symmetric = true if C => X is symmetric .
-    eq C => transpose(X) X is symmetric = true .
-    eq C => X transpose(X) is symmetric = true .
+    ceq C => transpose(X)     is symmetric = true if C => X is symmetric .
+    eq  C => transpose(X) X   is symmetric = true .
+    eq  C => X transpose(X)   is symmetric = true .
     ceq C => X Y transpose(X) is symmetric = true if C => Y is symmetric .
     ceq C => transpose(X) Y X is symmetric = true if C => Y is symmetric .
 
     *** ORTHOGONAL
     ceq C => X Y is orthogonal = true if C => X is orthogonal
-                                    and  C => Y is orthogonal .
-    ceq C => X is invertible = true if C => X is orthogonal .
+                                     and C => Y is orthogonal .
+    ceq C => X is invertible   = true if C => X is orthogonal .
     ceq C => transpose(X) is orthogonal = true if C => X is orthogonal .
     ceq C => inverse(X)   is orthogonal = true if C => X is orthogonal .
 
@@ -72,33 +72,33 @@ fmod MATRIX-ASSUMPTIONS is
     *** SINGULAR
     ceq C => X is positive-definite = false if C => X is singular .
     ceq C => X is invertible = false if C => X is singular .
-    ceq C => X Y is singular = true if C => X is singular
-                                    or C => Y is singular .
+    ceq C => X Y is singular = true  if C => X is singular
+                                     or C => Y is singular .
 
     *** INVERTIBLE 
-    ceq C => X is invertible = false if is_square(X) == false .
-    ceq C => X Y is invertible = true if C => X is invertible 
-                                     and C => Y is invertible .
+    ceq C => X   is invertible = false if is_square(X) == false .
+    ceq C => X Y is invertible = true  if C => X is invertible 
+                                      and C => Y is invertible .
 
     *** TRIANGULAR, DIAGONAL
-    ceq C => X Y is lower-triangular   = true if C => X is lower-triangular 
-                                            and  C => Y is lower-triangular .
-    ceq C => X Y is upper-triangular   = true if C => X is upper-triangular 
-                                            and  C => Y is upper-triangular .
+    ceq C => X Y   is lower-triangular = true if C => X is lower-triangular 
+                                             and C => Y is lower-triangular .
+    ceq C => X Y   is upper-triangular = true if C => X is upper-triangular 
+                                             and C => Y is upper-triangular .
     ceq C => X + Y is lower-triangular = true if C => X is lower-triangular 
-                                            and  C => Y is lower-triangular .
+                                             and C => Y is lower-triangular .
     ceq C => X + Y is upper-triangular = true if C => X is upper-triangular 
-                                            and  C => Y is upper-triangular .
+                                             and C => Y is upper-triangular .
     ceq C => transpose(X) is upper-triangular = true 
-                                                if C => X is lower-triangular .
+                                              if C => X is lower-triangular .
     ceq C => transpose(X) is lower-triangular = true 
-                                                if C => X is upper-triangular .
+                                              if C => X is upper-triangular .
     ceq C => X + Y is diagonal = true if C => X is diagonal 
                                      and C => Y is diagonal .
-    ceq C => X Y is diagonal   = true if C => X is diagonal 
+    ceq C => X Y   is diagonal = true if C => X is diagonal 
                                      and C => Y is diagonal .
-    ceq C => X is triangular = true if C => X is lower-triangular 
-                                    or C => X is upper-triangular .
+    ceq C => X   is triangular = true if C => X is lower-triangular 
+                                      or C => X is upper-triangular .
     ceq C => X is upper-triangular = true if C => X is diagonal .
     ceq C => X is lower-triangular = true if C => X is diagonal .
 
